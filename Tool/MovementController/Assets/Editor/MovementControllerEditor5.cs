@@ -82,10 +82,9 @@ public class MovementControllerEditor : Editor
 
     private void ClearNulls()
     {
-        bool foundNull = false;
         int i = wpArrayCount.intValue - 1;
 
-        while (foundNull || i >= 0)
+        while ( i >= 0)
         {
             if (!GetWaypointAt(i))
             {
