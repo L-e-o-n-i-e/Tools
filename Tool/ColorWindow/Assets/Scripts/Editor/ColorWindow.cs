@@ -103,7 +103,7 @@ public class ColorWindow : EditorWindow
                     if (evt.button == 2)
                     {
                         Color originalColor = colors[index];
-                        ChangeNeighbourghsColor(i, j, originalColor, selectedColor);
+                        ChangeNeighbourghsColor(index, originalColor, selectedColor);
                     }
                     if (evt.button == 1)
                         this.colors[index] = eraseColor;   //Set the color of the index
@@ -121,24 +121,18 @@ public class ColorWindow : EditorWindow
         GUI.color = oldColor;                         //Restore the old color
     }
 
-    private void ChangeNeighbourghsColor( int col, int row, Color originalColor, Color newColor)
+    private void ChangeNeighbourghsColor(int pos, Color originalColor, Color newColor)
     {
-        Color[,] grid = new Color[nbCol, nbRows];
-
-        for (int i = 0; i < colors.Length; i++)
-        {
-            int y = i / this.nbRows;
-            int x = i % this.nbCol;
-            grid[x, y] = colors[i];
-        }
-
         Stack<Vector2Int> stack = new Stack<Vector2Int>();
-        stack.Push(new Vector2Int(col, row)); // Start with the clicked rectangle
-        List<Vector2Int> closedList = new List<Vector2Int>();
+        int x = pos % nbCol;
+        int y = pos / nbCol;
 
-        while (stack.Count > 0)
+        stack.Push(new Vector2Int(x, y)); // Start with the clicked rectangle
+        HashSet<Vector2Int> closedList = new HashSet<Vector2Int>();
+
+        while (stack.Count > 0) //As long as there are rectangles to check
         {
-            Vector2Int current = stack.Pop();
+            Vector2Int current = stack.Pop(); //Remove the last that came in to check it
 
             int currentX = current.x;
             int currentY = current.y;
@@ -148,30 +142,25 @@ public class ColorWindow : EditorWindow
                 continue; // Outside the bounds of the grid
             }
 
-            if (grid[currentX, currentY] != originalColor)
+            if (colors[currentX + (currentY * nbRows)] != originalColor)
             {
                 continue; // Not the color we're searching for
             }
 
-            grid[currentX, currentY] = newColor; // Mark as visited and change color
-            closedList.Add(current);
-
-
-            stack.Push(new Vector2Int(currentX + 1, currentY)); // right neighbor
-            stack.Push(new Vector2Int(currentX - 1, currentY)); // left neighbor
-            stack.Push(new Vector2Int(currentX, currentY + 1)); // top neighbor
-            stack.Push(new Vector2Int(currentX, currentY - 1)); // bottom neighbor
-        }
-
-        //Take all the content of grid[,] and put it back into colors[]
-        int index = 0;
-        for (int i = 0; i < nbCol; i++)
-        {
-            for (int j = 0; j < nbRows; j++)
+            if (!closedList.Contains(current))
             {
-                colors[index] = grid[i, j];
-                index++;
+                colors[currentX + (currentY * nbRows)] = newColor; // Mark as visited and change color
+                closedList.Add(current); //Save it in the closed list
             }
+
+            if (!closedList.Contains(new Vector2Int(currentX + 1, currentY)))
+                stack.Push(new Vector2Int(currentX + 1, currentY)); // right neighbor
+            if (!closedList.Contains(new Vector2Int(currentX - 1, currentY)))
+                stack.Push(new Vector2Int(currentX - 1, currentY)); // left neighbor
+            if (!closedList.Contains(new Vector2Int(currentX, currentY + 1)))
+                stack.Push(new Vector2Int(currentX, currentY + 1)); // top neighbor
+            if (!closedList.Contains(new Vector2Int(currentX, currentY - 1)))
+                stack.Push(new Vector2Int(currentX, currentY - 1)); // bottom neighbor
         }
     }
     private Color ApplyRandomness(Color color)
