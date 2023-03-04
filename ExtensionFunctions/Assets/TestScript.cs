@@ -71,6 +71,24 @@ public class TestScript : MonoBehaviour
             Debug.Log("Predicate2 succeded!");
         }
 
+
+        //7. Make an extension function that runs a delegate on a collection of type T, and returns a collection of type G
+        HashSet<int> intData = new HashSet<int>() { 8, 9, 23, 45, 6, 12, 2 };
+
+            //Version 1
+       string[] f = intData.ExtractFromCollection<int,string>((element) =>{return (element * 10).ToString();} );
+        //foreach (string item in f)
+        //{
+        //    Debug.Log(item + " ");
+        //}
+
+            //Version 2
+        IEnumerable<string> p = intData.ExtractFromCollectionToNewOne<int, string>((element) => { return (element * 2).ToString();});
+        foreach (string item in p)
+        {
+            Debug.Log(item);
+        }
+
     }
 
     private void Update()

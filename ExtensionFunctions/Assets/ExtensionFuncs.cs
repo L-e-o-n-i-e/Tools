@@ -7,32 +7,10 @@ using System.Linq;
 public static class ExtensionFuncs              //static required
 {
     //Student requirements
-    /*
-     * For these exercises. You are not allowed to use ChatGPT or use the ExtensionFunc sheet I gave you
-     * My sheet contains the answers
-     * ChatGPT will be able to answer these with no problem at all
-     * Using stack overflow or other resources is allowed and heavily recommended
-     * 
-     * //
-    
 
-   
-    Make an extension function that runs a delegate on a collection of type T, and returns a collection of type G
-        Examples:
-            Vector3[] velocitiesOfEachRb = arrayOfRigidbodiesIHave.CollectionFrom((rb)=>{ return rb.velocity;});
-            Vector3[] positionsOfGameObjects = arrayOfGameObjects.CollectionFrom((go)=>{ return go.position;});
-   
 
-    /*
-     Examples shown in class
-     An extension function that returns the average of a vector3
-     An extension function that absolutes all values in an int array
-     An extension function of rigidbody that given a float arguement, returns if speed is above that threshold
-     Our own Contains function
-     An extension function that runs a delegate on each element in an int array and replaces the int
-     An extension function that extends type T array and randomizes the array
 
-     */
+
     //1. Make an extension function on a Vector2 which returns a random value between x & y
     public static float RandomBetween(this Vector2 v2)
     {
@@ -58,7 +36,7 @@ public static class ExtensionFuncs              //static required
 
     //3. Make an extension function that given a string array & label, returns a single string formated like:
     //label: elem1,elem2,elem3
-    public static string LabelAndEachElmtToString(this string[] arr, string label) 
+    public static string LabelAndEachElmtToString(this string[] arr, string label)
     {
         if (arr == null)
             throw new Exception("The collection passed to LabelAndEachElmtToString is null");
@@ -100,7 +78,7 @@ public static class ExtensionFuncs              //static required
     }
 
     //5. Make an extension function that mimics how .Contains works     
-    public static bool ContainsThisElement<T>(this IEnumerable<T> collection, T value) 
+    public static bool ContainsThisElement<T>(this IEnumerable<T> collection, T value)
     {
         bool contains = false;
 
@@ -113,12 +91,12 @@ public static class ExtensionFuncs              //static required
             {
                 contains = true;
                 break;
-            }            
+            }
         }
-        return contains;     
+        return contains;
     }
 
-    //Make an extension function that runs a predicate on each element and returns if it is true for all elements
+    //6. Make an extension function that runs a predicate on each element and returns if it is true for all elements
     //Predicate : Predicate <float, int> delegate that always returns a bool. returns true if all elements are true to a confdition   ex : arr.TrueForAll((a) => {return a > 0 })
     //Test script run each method at least once.
     public static bool TrueForAll<T>(this IEnumerable<T> collection, Predicate<T> predicate)
@@ -139,16 +117,80 @@ public static class ExtensionFuncs              //static required
         return condition;
     }
 
+    //7. Make an extension function that runs a delegate on a collection of type T, and returns a collection of type G
+    //Examples:
 
+    //    Vector3[] velocitiesOfEachRb = arrayOfRigidbodiesIHave.CollectionFrom((rb) => { return rb.velocity; });
+
+    //Vector3[] positionsOfGameObjects = arrayOfGameObjects.CollectionFrom((go) => { return go.position; });
     //Delegate on a collection of type T and returns collection of type G ex : CollectionFrom((rb) =? {return rb.velocity;}); Must work for int, float, bool, string
     //Test script run each method at least once.
 
-
     //T[]  --- T     return default T;
-    public static T RandomFunc<T>(TargetJoint2D value) where T : IEnumerable
+
+    public static TResult[] ExtractFromCollection<T, TResult>(this IEnumerable<T> collection, Func<T, TResult> func)
     {
-        return default(T);                                                                       //cannot return null, int cannot be null.
+        if (collection.Count<T>() == 0)
+            throw new Exception("Collection passed in GetCollectionOf function is empty");
+
+        TResult[] toRet = new TResult[collection.Count<T>()];
+        int i = 0;
+
+        foreach (T item in collection)
+        {
+            try
+            {
+                TResult result = func.Invoke(item);
+                toRet[i] = result;
+                i++;
+            }
+            catch (Exception e)
+            {
+                Debug.Log($"Error in TrueForAll function : {e.Message}");
+            }
+        }
+
+        return toRet;                                                                       //cannot return null, int cannot be null.
     }
+
+
+    public static IEnumerable<TResult> ExtractFromCollectionToNewOne<T, TResult>(this IEnumerable<T> collection, Func<T, TResult> func)
+    {
+        if (collection.Count<T>() == 0)
+            throw new Exception("Collection passed in GetCollectionOf function is empty");
+
+        List<TResult> toRet = new List<TResult>();
+
+        foreach (T item in collection)
+        {
+            for (int i = 0; i < collection.Count<T>(); i++)
+            {
+                try
+                {
+                    toRet.Add( func.Invoke(item));
+                }
+                catch (Exception e)
+                {
+                    Debug.Log($"Error in TrueForAll function : {e.Message}");
+                }
+
+            }
+        }
+
+        return toRet;                                                                       //cannot return null, int cannot be null.
+    }
+
+
+    /*
+        Examples shown in class
+        An extension function that returns the average of a vector3
+        An extension function that absolutes all values in an int array
+        An extension function of rigidbody that given a float arguement, returns if speed is above that threshold
+        Our own Contains function
+        An extension function that runs a delegate on each element in an int array and replaces the int
+        An extension function that extends type T array and randomizes the array
+
+        */
 
 
 
