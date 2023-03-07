@@ -4,19 +4,13 @@ using System.IO;
 using UnityEngine;
 
 public class TestJsonScript : MonoBehaviour {
-    //XML Examples: http://wiki.unity3d.com/index.php?title=Saving_and_Loading_Data:_XmlSerializer
-    //Binary Formater
-
-
-    //https://docs.unity3d.com/Manual/JSONSerialization.html
-    // Use this for initialization
-
-
     void Start ()
     {
         //We start by serializing an existing class 
         //First we create the class
+      
         SomeMiniClass newClass = new SomeMiniClass(5, 10, 8, new List<string>() { "hello", "world" });
+    
 
         //Then we serialize it into a JSON format, which is a string
         string jsonSerializationOfNewClass = JsonUtility.ToJson(newClass);

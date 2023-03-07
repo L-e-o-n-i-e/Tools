@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO;
+using TMPro;
 
 public class MainScript : MonoBehaviour
 {
     public int nbGameObject = 8;
     public Transform parent;
     public Transform plane;
+    public RectTransform inputFileName;
     private float height = 100;
-    private string fileName = "defaultFile.txt";
+    private string fileName = "TestFile";
     GameObjectData goData;
-    GameObjectData[] gameObjects;
+    ObjectFalling[] gameObjects;
 
     private void Awake()
     {
@@ -20,7 +23,7 @@ public class MainScript : MonoBehaviour
 
     private void SpawnPrimitives(int nbGameObject)
     {
-        GameObjectData[] gameObjects = new GameObjectData[nbGameObject];
+        ObjectFalling[] gameObjects = new ObjectFalling[nbGameObject];
 
         for (int i = 0; i < nbGameObject; i++)
         {
@@ -28,31 +31,38 @@ public class MainScript : MonoBehaviour
             GameObject go = GameObject.CreatePrimitive(type == (PrimitiveType)4 ? (PrimitiveType)3 : type);
             go.transform.SetParent(parent);
 
-            go.AddComponent<Rigidbody>();                                                                       //Add Rigidbody so it can use physics
-            Rigidbody rb = go.transform.GetComponent<Rigidbody>();
+            Rigidbody rb = go.AddComponent<Rigidbody>();
             go.transform.position = new Vector3(Random.Range(-plane.localScale.x, plane.localScale.x), height, Random.Range(-plane.localScale.z, plane.localScale.z));  //set a random position
-            Vector3 rotation = new Vector3(go.transform.rotation.x, go.transform.rotation.y, go.transform.rotation.z);
+            ObjectFalling objFall = go.AddComponent<ObjectFalling>();
+            objFall.Instantiate(type, go.transform.position, rb.rotation, rb.velocity);
 
-            gameObjects[i] = new GameObjectData(type, go.transform.position, rotation, rb.velocity);      //Save the data of this gameObject into an array of GameObjectData
 
+            gameObjects[i] = objFall;      //Save the data of this gameObject into an array of GameObjectData            
         }
     }
 
     public string ToSerialize()
     {
-        return JsonUtility.ToJson(goData);
+        string content = "";
+        foreach(ObjectFalling obj in gameObjects)
+        {
+
+            content += JsonUtility.ToJson(obj.Stats);
+        }
+        return content;
     }
 
-    public void Load(string jsonData)
+    public void Load(string filePath)
     {
         for (int i = 0; i < gameObjects.Length; i++)
         {
             GameObject.Destroy(parent.GetChild(i).gameObject);
         }
-       
-           
+        //For the nb of objects in the scene, 
+        //We loop over and create a primitive and give it data
+        string jsonDeserialized = File.ReadAllText(filePath);
 
-        goData = JsonUtility.FromJson<GameObjectData>(jsonData);
+        goData = JsonUtility.FromJson<GameObjectData>(jsonDeserialized);
     }
 
     public void WriteIntoFile(string content)
@@ -64,26 +74,16 @@ public class MainScript : MonoBehaviour
         string filePath = Path.Combine(directoryPath, fileName);
         File.WriteAllText(filePath, content);
     }
-
-    public void NewFileName(string newFileName)
+    public void Save()
     {
-        this.fileName = newFileName;
+        //NewFileName();
+        WriteIntoFile(ToSerialize());
     }
 
-    [System.Serializable]
-    public class GameObjectData
-    {
-        PrimitiveType shape;
-        Vector3 position;
-        Vector3 rotation;
-        Vector3 velocity;
-
-        public GameObjectData(PrimitiveType shape, Vector3 position, Vector3 rotation, Vector3 velocity)
-        {
-            this.shape = shape;
-            this.position = position;
-            this.rotation = rotation;
-            this.velocity = velocity;
-        }
+    public void NewFileName()
+    {        
+        this.fileName = inputFileName.GetComponent<TextMeshPro>().text ;
     }
+
+   
 }
