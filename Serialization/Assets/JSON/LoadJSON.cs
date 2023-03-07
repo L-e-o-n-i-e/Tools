@@ -7,7 +7,6 @@ using ExtensionFunctions;
 
 public class LoadJSON : MonoBehaviour
 {
-    public GameObject prefab;
     public Transform plane;
     public int nbObjects = 3;
     private List<SaveJSON> goToSave;
@@ -71,8 +70,8 @@ public class LoadJSON : MonoBehaviour
             SaveJSON objSave = go.AddComponent<SaveJSON>();
             objSave.SetPrimitiveType(statsList[i].primType);
             Quaternion q = (statsList[i].rotation).ToQuaternion();
+            go.transform.rotation = new Quaternion(q.x, q.y, q.z, q.w);
             rb.angularVelocity = statsList[i].angularVelocity.ToVector3();
-            rb.rotation.Set(q.x, q.y, q.z, q.w);
             rb.velocity = statsList[i].velocity.ToVector3();
             goToSave.Add(objSave);
         }
@@ -81,7 +80,7 @@ public class LoadJSON : MonoBehaviour
 
     public void Save()
     {
-        Debug.Log("Save JSON");
+        Debug.LogError("Save JSON");
         List<Stats> goStats = new List<Stats>();
 
         foreach (SaveJSON gameObject in goToSave)

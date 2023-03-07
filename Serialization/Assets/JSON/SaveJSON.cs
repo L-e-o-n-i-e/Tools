@@ -14,16 +14,7 @@ public class SaveJSON : MonoBehaviour
     void Awake()
     {
         rb = transform.GetComponent<Rigidbody>();      
-        
-        
-        //Now we will read from the file, and convert back into the original class
-        //First we need the text data 
-        //string jsonDeserialized = File.ReadAllText(filePath);
-
-        ////Then we deserialize
-        //Stats newClassLoadedFromJson = JsonUtility.FromJson<Stats>(jsonDeserialized);
-
-       
+            
 
     }
     private void Start()
@@ -33,7 +24,7 @@ public class SaveJSON : MonoBehaviour
 
     private void Update()
     {
-        ExtensionFunctions.ExtensionFuncs.ClampSpeed(rb, 3);
+        //ExtensionFunctions.ExtensionFuncs.ClampSpeed(rb, 3);
     }
 
     public Stats GetStats()
