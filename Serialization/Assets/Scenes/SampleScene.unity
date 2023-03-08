@@ -676,9 +676,9 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1036860423}
-        m_TargetAssemblyTypeName: ReadInput, Assembly-CSharp
-        m_MethodName: SetInput
+      - m_Target: {fileID: 1036860422}
+        m_TargetAssemblyTypeName: LoadJSON, Assembly-CSharp
+        m_MethodName: ReadInput
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1477,7 +1477,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1036860421}
   - component: {fileID: 1036860422}
-  - component: {fileID: 1036860423}
   m_Layer: 0
   m_Name: MainFlow
   m_TagString: Untagged
@@ -1515,18 +1514,6 @@ MonoBehaviour:
   plane: {fileID: 367138904}
   inputFileName: {fileID: 417271355}
   nbObjects: 40
---- !u!114 &1036860423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1036860419}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32ef941bcab896f49a564d78c356476a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1122347500
 GameObject:
   m_ObjectHideFlags: 0

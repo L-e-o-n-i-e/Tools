@@ -83,7 +83,7 @@ public class LoadJSON : MonoBehaviour
 
     public void Save()
     {
-        Debug.LogError("Save JSON");
+        Debug.Log("Save JSON");
         List<Stats> goStats = new List<Stats>();
 
         foreach (SaveJSON gameObject in goToSave)
