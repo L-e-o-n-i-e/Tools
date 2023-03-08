@@ -10,7 +10,7 @@ public class MainScript : MonoBehaviour
     public int nbGameObject = 8;
     public Transform parent;
     public Transform plane;
-    public RectTransform inputFileName;
+    
     private float height = 100;
     private string fileName = "TestFile";
     GameObjectData goData;
@@ -71,19 +71,15 @@ public class MainScript : MonoBehaviour
         if (!Directory.Exists(directoryPath))
             Directory.CreateDirectory(directoryPath);
 
+        
         string filePath = Path.Combine(directoryPath, fileName);
         File.WriteAllText(filePath, content);
     }
     public void Save()
-    {
-        //NewFileName();
+    {        
         WriteIntoFile(ToSerialize());
     }
-
-    public void NewFileName()
-    {        
-        this.fileName = inputFileName.GetComponent<TextMeshPro>().text ;
-    }
+    
 
    
 }

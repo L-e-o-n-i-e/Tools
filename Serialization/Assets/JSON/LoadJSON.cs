@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using ExtensionFunctions;
-
+using UnityEngine.UI;
+using TMPro;
 
 public class LoadJSON : MonoBehaviour
 {
     public Transform plane;
+    public RectTransform inputFileName;
     public int nbObjects = 3;
     private List<SaveJSON> goToSave;
     private string filePath = "";
+    private string fileName = "SaveJSON.txt";
     private float height = 30;
 
     private void Awake()
@@ -66,7 +69,7 @@ public class LoadJSON : MonoBehaviour
             GameObject go = GameObject.CreatePrimitive(statsList[i].primType);
             go.transform.SetParent(this.transform);
             go.transform.position = (statsList[i].position).ToVector3();
-            Rigidbody rb =  go.AddComponent<Rigidbody>();
+            Rigidbody rb = go.AddComponent<Rigidbody>();
             SaveJSON objSave = go.AddComponent<SaveJSON>();
             objSave.SetPrimitiveType(statsList[i].primType);
             Quaternion q = (statsList[i].rotation).ToQuaternion();
@@ -96,9 +99,8 @@ public class LoadJSON : MonoBehaviour
         string directoryPath = Path.Combine(Application.streamingAssetsPath, "GameData/");  //Path.combine is like just adding them +, but takes care of merging / for you (DO NOT PUT / in fron of JsonExamples)
         if (!Directory.Exists(directoryPath))                                                   //Create path if doesnt exist or error
             Directory.CreateDirectory(directoryPath);
-
-
-        filePath = Path.Combine(directoryPath, "SaveJSON.txt");
+        
+        filePath = Path.Combine(directoryPath, fileName);
         File.WriteAllText(filePath, content);
     }
 
@@ -111,6 +113,12 @@ public class LoadJSON : MonoBehaviour
             GameObject.Destroy(objToDel.gameObject);
         }
     }
+    
+    public void ReadInput(string s)
+    {
+        this.fileName = s + ".txt";
+        Debug.Log("New file name : " + fileName);
+    }    
 }
 
 
