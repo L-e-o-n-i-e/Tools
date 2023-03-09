@@ -29,7 +29,7 @@ public class AIBase : MonoBehaviour
             if(aiStats.hp < 0)
             {
                 GameObject.Destroy(gameObject);
-                //GameObject.DestroyImmediate ??
+                //GameObject.DestroyImmediate(gameObject, true);
             }
         }
 
