@@ -71,7 +71,8 @@ public static class GeneratePrefabs
     {
         go.AddComponent<BoxCollider2D>();
         go.AddComponent<Rigidbody2D>();
-        go.AddComponent<SpriteRenderer>();
+        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
+        AddRandomSpriteReference(sr);
     }
 
     private static string AddAIComponent(GameObject go)
@@ -103,6 +104,18 @@ public static class GeneratePrefabs
         component.rb = rb;
         component.sr = sr;
         component.coli = bc;
+    }
+    public static void AddRandomSpriteReference(SpriteRenderer sr)
+    {
+        string path = "EnemySprites";
+        Sprite[] arr = Resources.LoadAll<Sprite>(path);
+        if (arr.Length > 0)
+        {
+            int index = UnityEngine.Random.Range(0, arr.Length - 1);
+            sr.sprite = arr[index];
+        }
+        else
+            throw new Exception("No sprites were found.");
     }
 
     public static void AddAIStatsReference(Old_AIBase component)

@@ -22,7 +22,10 @@ public class Challenge : MonoBehaviour
             c) Be sure to maintain all links and values
             d) Save the prefab properly, handle all errors and edge cases
 
-        3) Fix the bug
+        3) Fix the bug 
+        //So the SpriteRenderer component has no Sprite attatched to it.
+        //And they are no set to a position
+
         a) When the game starts, load 10 of the prefabs randomly
         b) Press the "A" key on the keyboard to deal damage to the AI's
         c) Understand & Fix the bug
