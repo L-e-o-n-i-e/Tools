@@ -123,7 +123,8 @@ public static class GeneratePrefabs
         //Add a scriptable Assets (randomly)
         string path = "Scriptable Assets";
         AIStats[] arr = Resources.LoadAll<AIStats>(path);
-        int index = UnityEngine.Random.Range(0, arr.Length - 1);
+
+        int index = UnityEngine.Random.Range(0, arr.Length - 1);     
         component.aiStats = arr[index];
     }
     public static string GenerateRandomName()

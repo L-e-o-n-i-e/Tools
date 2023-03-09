@@ -220,4 +220,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: effaabcdda4dc7f47a56e35522f56f9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nbOfEnemies: 10
+  nbOfEnemies: 3

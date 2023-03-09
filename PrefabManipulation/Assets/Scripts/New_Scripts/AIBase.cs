@@ -10,23 +10,19 @@ public class AIBase : MonoBehaviour
     public Collider2D coli;
     public SpriteRenderer sr;
     public AIStats aiStats;
+    List<string> s;
 
-    
-
-
-    public void Start()
+    public void Awake()
     {
-        
-
+        aiStats = GameObject.Instantiate(aiStats);
     }
-
 
     public void Update()
     {
         if(Input.GetKeyDown(KeyCode.A))
         {
             aiStats.hp--;
-            if(aiStats.hp < 0)
+            if(aiStats.hp <= 0)
             {
                 GameObject.Destroy(gameObject);
                 //GameObject.DestroyImmediate(gameObject, true);

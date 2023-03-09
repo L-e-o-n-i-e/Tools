@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "AI/Stats")]
 public class AIStats : ScriptableObject
 {
-    public float hp;
+    public int hp;
     public float speed;
 
     public void Save()
