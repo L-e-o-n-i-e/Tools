@@ -25,21 +25,15 @@ public class Test : MonoBehaviour, IManagable<ObjStats>
     {
         throw new System.NotImplementedException();
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }
 
 public class ObjStats
 {
+    int hp;
 
+    public ObjStats(int hp)
+    {
+        this.hp = hp;
+    }
 }
