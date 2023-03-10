@@ -5,7 +5,7 @@ using UnityEngine;
 public class Move : MonoBehaviour
 {
     public Rigidbody2D rb;
-    private int speed = 25;
+    private int speed = 10;
 
     // Update is called once per frame
     void Update()

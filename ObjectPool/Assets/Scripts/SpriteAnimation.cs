@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SpriteAnimation : MonoBehaviour
 {
-    public Sprite[] swimSprites = new Sprite[6];
+    public List<Sprite> sprites = new List<Sprite>();
     #region Animation
     private SpriteRenderer spRr;
     private float animSpeed = .2f;
@@ -13,6 +13,7 @@ public class SpriteAnimation : MonoBehaviour
     #endregion
     void Start()
     {
+        
         spRr = transform.GetComponent<SpriteRenderer>();
         timeToSwitchSprite = animSpeed + Time.time;
     }
@@ -28,8 +29,8 @@ public class SpriteAnimation : MonoBehaviour
         if (Time.time >= timeToSwitchSprite)
         {
             currentSpriteIndex++;
-            currentSpriteIndex = currentSpriteIndex % 6;
-            spRr.sprite = swimSprites[currentSpriteIndex];
+            currentSpriteIndex = currentSpriteIndex % sprites.Count;
+            spRr.sprite = sprites[currentSpriteIndex];
             timeToSwitchSprite = animSpeed + Time.time;
         }
     }
