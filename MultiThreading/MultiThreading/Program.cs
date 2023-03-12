@@ -8,31 +8,30 @@ using System.Threading.Tasks;
 namespace BankOfBitsAndBytes
 {
     //Keywork : BRUTE FORCE ALGORITHM 
-    //All I know is the nb of char in the password
     class Program
     {
-        static readonly int passwordLength = 2; //Can you solve up to 6?
+        static readonly int passwordLength = 6; //Can you solve up to 6?
 
 
         static void Main(string[] args)
         {
             BankOfBitsNBytes bbb = new BankOfBitsNBytes(passwordLength);
-            int robbedamount = 0;
-            int start = 0;
+            char[] currentPassword = new char[passwordLength];
+
+            for (int i = 0; i < passwordLength; i++)
+            {
+                currentPassword[i] = BankOfBitsNBytes.acceptablePasswordChars[0];
+            }
 
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
-            
 
-            while ( robbedamount != -1 )
+            while (bbb.WithdrawMoney(currentPassword) != -1)
             {
-                //on fait des guess
-                robbedamount = Guess(bbb, ref start);
-                if (robbedamount != 500)
-                    start++;
-                if(start > 24)
-                    break;
+                currentPassword = IncrementPassword(currentPassword);
+                //OutputCharArray(currentPassword);
             }
+
             TimeSpan ts = stopWatch.Elapsed;
             string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
             ts.Hours, ts.Minutes, ts.Seconds,
@@ -48,52 +47,25 @@ namespace BankOfBitsAndBytes
             Console.Out.WriteLine(new string(toOut));
         }
 
-        private char IncrementAtIndex(char[] guess, int index, int max)
+        static char[] IncrementPassword(char[] currentPassword)
         {
-            return guess[index] < max ? (char)((int)guess[index]++) : (char)97;
-        }
+            int i = passwordLength - 1;
 
-        static int Guess(BankOfBitsNBytes bbb, ref int start)
-        {
-            int amount = 0;
-            bool jobDone = false;
-            char[] guess = new char[passwordLength];
-            guess[0] = (char)(start + 97);
-
-            //Initialize the password with char 'a' everywhere
-            for (int i = passwordLength - 1; i > 0; i--)
+            while (i >= 0)
             {
-                guess[i] = (char)97;
-            }
+                int nextIndex = (Array.IndexOf(BankOfBitsNBytes.acceptablePasswordChars, currentPassword[i]) + 1) % BankOfBitsNBytes.acceptablePasswordChars.Length;
+                currentPassword[i] = BankOfBitsNBytes.acceptablePasswordChars[nextIndex];
 
-
-            //Increment from right to left
-            for (int i = (passwordLength - 1); i > 0; i--)
-            {
-                for (int j = 97; j < BankOfBitsNBytes.acceptablePasswordChars.Length + 97; j++)
+                if (nextIndex != 0)
                 {
-                    guess[i] = (char)j;
-                    OutputCharArray(guess);
-                    amount = bbb.WithdrawMoney(guess);
-                    if (amount == 500)
-                    {
-                        start = 0;
-                        jobDone = true;
-                        return 500;
-                    }
-                    if (amount == -1)
-                    {
-                        jobDone = true;
-                        return -1;
-                    }
+                    break;
                 }
+                else
+                    i--;
             }
-            jobDone = true;
 
-
-            return amount;
+            return currentPassword;
         }
-
 
         //If you fully rob the bank, you can kill the thread from the outside
         //Variables can be read and when it changes, you can tell to stop the thread
