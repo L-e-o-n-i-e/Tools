@@ -29,14 +29,22 @@ namespace BankOfBitsAndBytes
             Stack<delg> toProcess = new Stack<delg>();
             ResetJobs(ref delgList, ref toProcess);
             #endregion
+            #region Threads
+            Stack<Thread> threads = new Stack<Thread>();
+            List<Thread> pooledThreads = new List<Thread>();
+
+            List<Thread> activeThreads = new List<Thread>();
+            #endregion
 
             int start = 0;
 
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
+
+
             while (toProcess.Count > 0 && !bankRobbed)
-            {                
+            {
                 if (pswFound)
                 {
                     ResetJobs(ref delgList, ref toProcess);
@@ -48,17 +56,22 @@ namespace BankOfBitsAndBytes
                 else
                 {
                     delg nextToProc = toProcess.Pop();
-                   // Console.WriteLine("Job has started for : " + (char)(start + 97));
+                    // Console.WriteLine("Job has started for : " + (char)(start + 97));
                     currentPassword[0] = BankOfBitsNBytes.acceptablePasswordChars[start];
                     currentPassword = ResetPassword(currentPassword);
-                    //StartThread(nextToProc, bbb, currentPassword);
-                    nextToProc.Invoke(bbb, currentPassword);
+                    Thread t = StartThread(nextToProc, bbb, currentPassword);
+                    t.Join();
+                    //Console.WriteLine("Thread # " + start + " started. Letter : " + currentPassword[0]);
+                    //nextToProc.Invoke(bbb, currentPassword);
                     if (start < BankOfBitsNBytes.acceptablePasswordChars.Length - 1)
                         start++;
                     else
                         break;
+
+
                 }
             }
+
 
             #region StopWatch
             TimeSpan ts = stopWatch.Elapsed;
@@ -66,9 +79,10 @@ namespace BankOfBitsAndBytes
             ts.Hours, ts.Minutes, ts.Seconds,
             ts.Milliseconds / 10);
             Console.WriteLine("RunTime " + elapsedTime);
-            #endregion 
+            #endregion
             Console.WriteLine("Program finished");
             Console.ReadLine();
+
         }
 
         private static void ResetCurrentPassword(ref char[] currentPassword)
@@ -99,7 +113,7 @@ namespace BankOfBitsAndBytes
             }
             toProcess = new Stack<delg>(delgList);
         }
-       
+
 
         //This is very expensive and just for debugging. You do not need to output in the final test
         static void OutputCharArray(char[] toOut)
@@ -144,10 +158,11 @@ namespace BankOfBitsAndBytes
                 else
                     break;
             }
-            if(amount == 500)
+            if (amount == 500)
             {
                 pswFound = true;
-            }else if(amount == -1)
+            }
+            else if (amount == -1)
             {
                 bankRobbed = true;
             }
