@@ -11,29 +11,23 @@ namespace BankOfBitsAndBytes
     //Keywork : BRUTE FORCE ALGORITHM 
     class Program
     {
-        static readonly int passwordLength = 3; //Can you solve up to 6?     
+        static readonly int passwordLength = 6; //Can you solve up to 6?     
         public delegate void delg(BankOfBitsNBytes bbb, char[] start);
-        static bool over = false;
+        static bool pswFound = false, bankRobbed = false;
 
         static void Main(string[] args)
         {
             BankOfBitsNBytes bbb = new BankOfBitsNBytes(passwordLength);
-            char[] currentPassword = new char[passwordLength];
             #region Password
             //initialize current password
-            for (int i = 0; i < passwordLength; i++)
-            {
-                currentPassword[i] = BankOfBitsNBytes.acceptablePasswordChars[0];
-            }
+            char[] currentPassword = new char[passwordLength];
+            ResetCurrentPassword(ref currentPassword);
             #endregion
             #region Delegates
             //Create a List of delegate
             List<delg> delgList = new List<delg>();
-            for (int i = 0; i < BankOfBitsNBytes.acceptablePasswordChars.Length; i++)
-            {
-                delgList.Add(new delg(Job));
-            }
-            Stack<delg> toProcess = new Stack<delg>(delgList);
+            Stack<delg> toProcess = new Stack<delg>();
+            ResetJobs(ref delgList, ref toProcess);
             #endregion
 
             int start = 0;
@@ -41,28 +35,50 @@ namespace BankOfBitsAndBytes
             Stopwatch stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            while (toProcess.Count > 0)
-            {
-                delg nextToProc = toProcess.Pop();
-                Console.WriteLine("Job has started for : " + (char)(start + 97));
-                currentPassword[0] = BankOfBitsNBytes.acceptablePasswordChars[start];
-                currentPassword = ResetPassword(currentPassword);
-                //StartThread(nextToProc, bbb, currentPassword);
-                nextToProc.Invoke(bbb, currentPassword);
-                if (start < BankOfBitsNBytes.acceptablePasswordChars.Length -1)
-                    start++;
+            while (toProcess.Count > 0 && !bankRobbed)
+            {                
+                if (pswFound)
+                {
+                    ResetJobs(ref delgList, ref toProcess);
+                    currentPassword[0] = 'a';
+                    ResetPassword(currentPassword);
+                    start = 0;
+                    pswFound = false;
+                }
                 else
-                    break;
-            }         
+                {
+                    delg nextToProc = toProcess.Pop();
+                   // Console.WriteLine("Job has started for : " + (char)(start + 97));
+                    currentPassword[0] = BankOfBitsNBytes.acceptablePasswordChars[start];
+                    currentPassword = ResetPassword(currentPassword);
+                    //StartThread(nextToProc, bbb, currentPassword);
+                    nextToProc.Invoke(bbb, currentPassword);
+                    if (start < BankOfBitsNBytes.acceptablePasswordChars.Length - 1)
+                        start++;
+                    else
+                        break;
+                }
+            }
 
+            #region StopWatch
             TimeSpan ts = stopWatch.Elapsed;
             string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
             ts.Hours, ts.Minutes, ts.Seconds,
             ts.Milliseconds / 10);
             Console.WriteLine("RunTime " + elapsedTime);
+            #endregion 
             Console.WriteLine("Program finished");
             Console.ReadLine();
         }
+
+        private static void ResetCurrentPassword(ref char[] currentPassword)
+        {
+            for (int i = 0; i < passwordLength; i++)
+            {
+                currentPassword[i] = BankOfBitsNBytes.acceptablePasswordChars[0];
+            }
+        }
+
         private static char[] ResetPassword(char[] currentPassword)
         {
             char[] newPsw = currentPassword.ToArray();
@@ -75,6 +91,15 @@ namespace BankOfBitsAndBytes
             }
             return newPsw;
         }
+        private static void ResetJobs(ref List<delg> delgList, ref Stack<delg> toProcess)
+        {
+            for (int i = 0; i < BankOfBitsNBytes.acceptablePasswordChars.Length; i++)
+            {
+                delgList.Add(new delg(Job));
+            }
+            toProcess = new Stack<delg>(delgList);
+        }
+       
 
         //This is very expensive and just for debugging. You do not need to output in the final test
         static void OutputCharArray(char[] toOut)
@@ -104,22 +129,31 @@ namespace BankOfBitsAndBytes
 
         static void Job(BankOfBitsNBytes bbb, char[] currentPassword)
         {
+            int amount = 0;
             char start = currentPassword[0];
-            bool jobIsDone = false;
 
-            while (bbb.WithdrawMoney(currentPassword) != -1)
+            amount = bbb.WithdrawMoney(currentPassword);
+            while (amount != -1 && amount != 500 && !pswFound && !bankRobbed)
             {
                 if (!IsJobDone(currentPassword))
                 {
                     currentPassword = IncrementPassword(currentPassword);
                     //OutputCharArray(currentPassword);
+                    amount = bbb.WithdrawMoney(currentPassword);
                 }
                 else
-                    break;                
+                    break;
             }
-            
+            if(amount == 500)
+            {
+                pswFound = true;
+            }else if(amount == -1)
+            {
+                bankRobbed = true;
+            }
+
         }
-       static bool IsJobDone(char[] currentPassword)
+        static bool IsJobDone(char[] currentPassword)
         {
             bool jobIsDone = false;
             if (currentPassword.Length > 1 && currentPassword[1] == (char)122)
@@ -135,7 +169,7 @@ namespace BankOfBitsAndBytes
                     }
                 }
             }
-            if(currentPassword.Length == 1)
+            if (currentPassword.Length == 1)
             {
                 jobIsDone = currentPassword[0] == (char)122 ? true : false;
             }
@@ -155,127 +189,5 @@ namespace BankOfBitsAndBytes
         //Variables can be read and when it changes, you can tell to stop the thread
     }
 
-
-
-    //    BankOfBitsNBytes bbb = new BankOfBitsNBytes(passwordLength);
-    //    bool bankRobbed = false;
-    //    char[] currentPassword = new char[passwordLength];
-    //    char[] startPassword = new char[passwordLength];
-    //    char[] endPassword = new char[passwordLength];
-
-    //    Queue<PswdDelg> jobs = new Queue<PswdDelg>();
-
-
-
-    //            for (int i = 0; i<passwordLength; i++)
-    //            {
-    //                //Setting the current password
-    //                currentPassword[i] = BankOfBitsNBytes.acceptablePasswordChars[0];
-    //                //Setting the start password 
-    //                startPassword[i] = BankOfBitsNBytes.acceptablePasswordChars[0];
-    //                //setting the end password (where the job ends)
-    //                endPassword[i] = BankOfBitsNBytes.acceptablePasswordChars[0];
-
-    //                //Making a queue of jobs, one job for every digit
-    //                jobs.Enqueue(new PswdDelg(IncrementPassword));
-    //            }
-    //endPassword[0] = BankOfBitsNBytes.acceptablePasswordChars[1];
-    //            bool jobIsDone = false;
-
-    //Stopwatch stopWatch = new Stopwatch();
-    //stopWatch.Start();
-
-    //            while (bbb.WithdrawMoney(currentPassword) != -1 && !jobIsDone)
-    //            {
-    //                //startPassword[0] = BankOfBitsNBytes.acceptablePasswordChars[start];
-    //                //start += start;
-    //                //endPassword[0] = BankOfBitsNBytes.acceptablePasswordChars[start];
-    //                currentPassword = IncrementPassword(currentPassword, endPassword);
-    //                if(currentPassword == endPassword)
-    //                {
-    //                    jobIsDone = true;
-    //                }
-    //                //Taking the first job out
-    //                //PswdDelg passwordGenerator = jobs.Dequeue();
-    //                //char[] newPassword = passwordGenerator(startPassword, endPassword);
-    //                //OutputCharArray(currentPassword);
-    //            }
-    //            bankRobbed = true;
-
-    //            TimeSpan ts = stopWatch.Elapsed;
-    //string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
-    //ts.Hours, ts.Minutes, ts.Seconds,
-    //ts.Milliseconds / 10);
-    //Console.WriteLine("RunTime " + elapsedTime);
-    //            Console.ReadLine();
-    //        }
-
-
-    //        //This is very expensive and just for debugging. You do not need to output in the final test
-    //        static void OutputCharArray(char[] toOut)
-    //{
-    //    Console.Out.WriteLine(new string(toOut));
-    //}
-
-    //static char[] IncrementPassword(char[] currentPassword, char[] endPassword)
-    //{
-    //    int i = passwordLength - 1;
-
-    //    while (i >= 0)
-    //    {
-    //        int nextIndex = (Array.IndexOf(BankOfBitsNBytes.acceptablePasswordChars, currentPassword[i]) + 1) % BankOfBitsNBytes.acceptablePasswordChars.Length;
-    //        currentPassword[i] = BankOfBitsNBytes.acceptablePasswordChars[nextIndex];
-    //        OutputCharArray(currentPassword);
-
-    //        if (nextIndex != 0)
-    //        {
-    //            break;
-    //        }
-    //        if (currentPassword == endPassword)
-    //        {
-    //            //endJob
-    //            break;
-    //        }
-    //        else
-    //            i--;
-    //    }
-
-    //    return currentPassword;
-    //}
-
-    ////If you fully rob the bank, you can kill the thread from the outside
-    ////Variables can be read and when it changes, you can tell to stop the thread
-
-
-    //#region Threads
-    //public static void StartThread(delg d)
-    //{
-    //    //ThreadStart ts = new ThreadStart(d);
-    //    //Thread t = new Thread(ts);
-    //    //t.Start();
-    //}
-
-    //List<delg> delgList = new List<delg>()
-    //{
-    //    //BiggerNightClub,
-    //    //BiggerNightClub,
-    //    //NightClub,
-    //    //() => someInt++,
-    //    //() => BiggerNightClub(),
-    //    //() => PrintOutChar('a', 50)
-    //};
-
-    //Stack<delg> toProcess = new Stack<delg>();
-
-    //        //    while(toProcess.Count > 0)
-    //        //    {
-    //        //        delg nextToProc = toProcess.Pop();
-    //        //StartThread(nextToProc);
-    //        //Console.WriteLine("Program finished");
-    //        //    Console.ReadLine();
-    //        //}       
-    //    }
-
-    //#endregion
 }
 
