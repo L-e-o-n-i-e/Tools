@@ -19,7 +19,7 @@ public class Factory<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
 
         foreach (EnumType type in enums)
         {
-            ObjectType obj =  Resources.Load<ObjectType>(type.ToString());
+            ObjectType obj =  Resources.Load<ObjectType>("Prefabs/Enemy/" + type.ToString());
             ressourcesDict.Add(type, obj);
             foreach (var item in ressourcesDict)
             {

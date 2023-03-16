@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public int nbObEnemies = 3;
 
     private Factory<EnemyType, Test, ObjStats> factory;
+    private Manager<EnemyType, Test, ObjStats> enemyManager;
 
     private void Start()
     {
@@ -16,6 +17,9 @@ public class GameManager : MonoBehaviour
         factory.Instantiate();
 
         PoolGeneric<EnemyType, Test, ObjStats>.Instance.Instantiate();
+
+        enemyManager = new Manager<EnemyType, Test, ObjStats>();
+        enemyManager.Initialize(factory);
     }
 
     private void InstantiateEnemies(int nbOfEnemies)

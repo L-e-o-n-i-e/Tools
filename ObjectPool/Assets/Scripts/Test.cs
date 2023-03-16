@@ -8,24 +8,25 @@ public class Test : MonoBehaviour, IManagable<ObjStats>
 
     public void Delete()
     {
-        throw new System.NotImplementedException();
+      //TODO
     }
 
     public void FixedRefresh()
     {
-        throw new System.NotImplementedException();
+        //TODO
+
     }
 
     public void Initialize(ObjStats stats)
     {
-        throw new System.NotImplementedException();
+        stats = new ObjStats(3);
     }
 
     public void Refresh()
     {
-        throw new System.NotImplementedException();
+        //TODO
     }
-    
+
 }
 
 public class ObjStats
