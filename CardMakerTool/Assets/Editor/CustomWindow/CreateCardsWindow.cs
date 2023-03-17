@@ -14,38 +14,114 @@ public class CreateCardsWindow : EditorWindow
         window.minSize = new Vector2(700, 600);
     }
 
-    CardAssetInfo cardAssets; //turn this into a list later
+    CardAssetInfo[] selectedCards;
+    Editor selectedCardEditor;
+    int index = 0;
 
 
     void OnGUI() //Called every frame in Editor window
     {
-        GUILayout.BeginHorizontal();        //Have each element below be side by side
-        DisplayEmptyRect();
-        DisplayCard();
-        DisplayEmptyRect();
+        selectedCards = Resources.LoadAll<CardAssetInfo>("CardsTemplate/" + "Ella");
+        selectedCardEditor = Editor.CreateEditor(selectedCards[index]);
+
+        GUILayout.BeginHorizontal();
+        DisplayLeftRect();
+        DisplayMiddleRect();
+        DisplayRightRect();
         GUILayout.EndHorizontal();
     }
-    
 
-    void DisplayEmptyRect()
+    void DisplayLeftRect()
     {
-        GUILayoutUtility.GetRect(100, 600);
+        GUILayout.BeginVertical();
+        DisplayEmptyRect(100, 150);
+        DisplayPreviousButton();
+        GUILayout.EndVertical();
+    }
+
+    void DisplayMiddleRect()
+    {
+        GUILayout.BeginVertical();
+        DisplayCard();
+        DisplayCreateCardButton();
+        GUILayout.EndVertical();
+
+    }
+
+    void DisplayRightRect()
+    {
+        GUILayout.BeginVertical();
+        DisplayLoadButton();
+        DisplayGoToFileButton();
+        DisplayEmptyRect(100, 150);
+        DisplayNextButton();
+        GUILayout.EndVertical();
+    }
+
+    void DisplayEmptyRect(int width, int height)
+    {
+        GUILayoutUtility.GetRect(width, height);
+    }
+    void DisplayPreviousButton()
+    {
+
+        if (GUILayout.Button("Previous"))
+        {
+            index = index == 0 ? selectedCards.Length - 1 : index - 1;
+
+            selectedCardEditor = Editor.CreateEditor(selectedCards[index]);
+            Debug.Log("Previous button clicked");
+            Debug.Log(selectedCards[index].cardName);
+        }
+    }
+
+    void DisplayNextButton()
+    {
+        if (GUILayout.Button("Next"))
+        {
+            index = index + 1 % selectedCards.Length;
+            selectedCardEditor = Editor.CreateEditor(selectedCards[index]);
+            Debug.Log("Next button clicked");
+            Debug.Log(selectedCards[index].cardName);
+        }
+    }
+
+    void DisplayLoadButton()
+    {
+        if (GUILayout.Button("Load"))
+        {
+
+            Debug.Log("Load button clicked");
+        }
+    }
+
+    void DisplayGoToFileButton()
+    {
+        if (GUILayout.Button("Go To File"))
+        {
+
+            Debug.Log("GoToFile button clicked");
+        }
+    }
+
+    void DisplayCreateCardButton()
+    {
+        if (GUILayout.Button("Create New Card"))
+        {
+
+            Debug.Log("CreateNewCard button clicked");
+        }
     }
 
     void DisplayCard()
     {
-        //MILIEU :
-        //Rectagle : Display the card
-        //Button : Create New Card 
-        GUILayout.BeginVertical();                                                      //Start vertical section, all GUI draw code after this will belong to same vertical
-        GUILayout.Label("Create a new card", EditorStyles.largeLabel);                            //A label that says "Toolbar"
-
-        CardAssetInfo selectedCard = Resources.Load<CardAssetInfo>("CardsTemplate/" + "Ella");
-        Editor selectedCardEditor = Editor.CreateEditor(selectedCard);
+        GUILayout.BeginVertical();
+        DisplayEmptyRect(200, 50);
+        GUILayout.Label("Banane", EditorStyles.largeLabel);
         selectedCardEditor.OnInspectorGUI();
 
 
-        GUILayout.EndVertical();                                                        //end vertical section
+        GUILayout.EndVertical();
     }
     //Diviser en 3 grands rectangles : Gauche, milieu, Droite
 
@@ -58,6 +134,6 @@ public class CreateCardsWindow : EditorWindow
     //Button : Load
     //Button : Go to file 
     //Button : Next Card
-   
+
 }
 
