@@ -29,4 +29,9 @@ public class CardAssetInfo : ScriptableObject
         this.power = power;
         Debug.Log("Constructor with args of CardAssetInfo");
     }
+
+    public void SetSprite(Sprite newSprite)
+    {
+        this.sprite = newSprite;
+    }
 }

@@ -50,11 +50,16 @@ public class CardAssetDrawer : Editor
             Event e = Event.current;
             if (e.type == EventType.MouseDown && previewRect.Contains(e.mousePosition))
             {
+                //Application.dataPath + "/Resources/Sprites/"
                 string path = AssetDatabase.GetAssetPath(sprite);
                 string absPath = EditorUtility.OpenFilePanel("Select Asset", path, "png,jpg,jpeg");
                 if (absPath.StartsWith(Application.dataPath))
                 {
-                    //TODO
+                    Debug.Log("selected file is :" + absPath);
+                    string spriteName = System.IO.Path.GetFileNameWithoutExtension(absPath);
+                    Debug.Log(spriteName);
+                    Sprite newSprite = Resources.Load<Sprite>("Sprites/" + spriteName);
+                    spriteProperty.objectReferenceValue = newSprite;
                 }
             }
         }
