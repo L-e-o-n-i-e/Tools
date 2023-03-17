@@ -16,13 +16,18 @@ public class CreateCardsWindow : EditorWindow
 
     CardAssetInfo[] selectedCards;
     Editor selectedCardEditor;
-    int index = 0;
-
+    int index;
+    bool initialized = false;
 
     void OnGUI() //Called every frame in Editor window
     {
-        selectedCards = Resources.LoadAll<CardAssetInfo>("CardsTemplate/" + "Ella");
-        selectedCardEditor = Editor.CreateEditor(selectedCards[index]);
+        if (!initialized)
+        {
+            selectedCards = Resources.LoadAll<CardAssetInfo>("CardsTemplate/");
+            index = 0;
+            selectedCardEditor = Editor.CreateEditor(selectedCards[index]);
+            initialized = true;
+        }
 
         GUILayout.BeginHorizontal();
         DisplayLeftRect();
@@ -79,7 +84,7 @@ public class CreateCardsWindow : EditorWindow
     {
         if (GUILayout.Button("Next"))
         {
-            index = index + 1 % selectedCards.Length;
+            index =( index + 1) % selectedCards.Length;
             selectedCardEditor = Editor.CreateEditor(selectedCards[index]);
             Debug.Log("Next button clicked");
             Debug.Log(selectedCards[index].cardName);
