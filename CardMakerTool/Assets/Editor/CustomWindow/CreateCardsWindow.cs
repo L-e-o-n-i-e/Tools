@@ -95,7 +95,7 @@ public class CreateCardsWindow : EditorWindow
     {
         if (GUILayout.Button("Load"))
         {
-
+            //Pops up the file explorer, and give you the power to chose a scriptable object, AND displays it.
             Debug.Log("Load button clicked");
         }
     }
@@ -104,7 +104,7 @@ public class CreateCardsWindow : EditorWindow
     {
         if (GUILayout.Button("Go To File"))
         {
-
+            //Opening Project Window and selecting by default that scriptable object
             Debug.Log("GoToFile button clicked");
         }
     }
@@ -128,17 +128,11 @@ public class CreateCardsWindow : EditorWindow
 
         GUILayout.EndVertical();
     }
-    //Diviser en 3 grands rectangles : Gauche, milieu, Droite
 
     //GAUCHE : haut en bas
     //File Name : displaying name of the card
     //Button : Previous card
-
-
-    //DROITE : 
-    //Button : Load
-    //Button : Go to file 
-    //Button : Next Card
+    
 
 }
 
