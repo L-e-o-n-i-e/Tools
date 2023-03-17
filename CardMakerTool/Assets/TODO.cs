@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class TODO : MonoBehaviour
 {
-   //Inspector :
-       //Display Preview Img in Inspector
-       //Being able to click on the img
-       //Display file explorer when clicked
-       //If an other image is selected, modify the link for Selected image
-
     //Custom Window :
         //Call OnInspectorGUI for the ScriptableObject and display it.
         //Load button :  opens file explorer : select a scriptable object that will render in the window
