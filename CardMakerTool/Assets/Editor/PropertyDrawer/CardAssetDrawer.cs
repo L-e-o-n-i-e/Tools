@@ -7,7 +7,7 @@ using UnityEditor;
 [CustomEditor(typeof(CardAssetInfo))]
 public class CardAssetDrawer : Editor
 {
-    private SerializedObject cardAsset;  
+    private SerializedObject cardAsset;
 
     private SerializedProperty cardName;
     private SerializedProperty mana;
@@ -16,6 +16,8 @@ public class CardAssetDrawer : Editor
     private SerializedProperty description;
     private SerializedProperty power;
 
+    Rect texturePos;
+
     public void OnEnable()
     {
         cardAsset = new SerializedObject(target);          //target is MovementController
@@ -23,9 +25,9 @@ public class CardAssetDrawer : Editor
         cardName = cardAsset.FindProperty("cardName");   //Use reflection to find a variable (property) in the target project
         mana = cardAsset.FindProperty("mana");
         sprite = cardAsset.FindProperty("sprite");
-      
+
         description = cardAsset.FindProperty("description");
-        power = cardAsset.FindProperty("power"); 
+        power = cardAsset.FindProperty("power");
     }
 
     //On inspector
@@ -33,23 +35,24 @@ public class CardAssetDrawer : Editor
     {
         Debug.Log("Override Inspector Card Asset");
         cardAsset.Update();
-
-        GUILayout.Label("Card Assets", EditorStyles.boldLabel);
         
-        EditorGUILayout.PropertyField(cardName);                        
-        EditorGUILayout.PropertyField(mana);                        
-        EditorGUILayout.PropertyField(color);                        
-        EditorGUILayout.PropertyField(sprite);
-        Sprite spriteText = (Sprite)sprite.objectReferenceValue;
-        if (spriteText != null)
+        GUILayout.Label("Card Assets", EditorStyles.boldLabel);
+        EditorGUILayout.BeginVertical();
+
+        EditorGUILayout.PropertyField(cardName);
+        EditorGUILayout.PropertyField(mana);
+        EditorGUILayout.PropertyField(color);
+        
+        Sprite sprite = (Sprite)cardAsset.FindProperty("sprite").objectReferenceValue;
+        if (sprite != null)
         {
-            Texture2D texture = new Texture2D((int)spriteText.rect.width, (int)spriteText.rect.height, TextureFormat.RGBA32, false);
-            texture.SetPixels(spriteText.texture.GetPixels((int)spriteText.rect.x, (int)spriteText.rect.y, (int)spriteText.rect.width, (int)spriteText.rect.height));
-            Debug.Log("Sprite " + spriteText.name + " Converting to texture " + texture.name);
-            texture.Apply();
+            GUILayout.Label(sprite.texture, GUILayout.MaxHeight(300f));
         }
-        EditorGUILayout.PropertyField(description);                         
+        
+
+        EditorGUILayout.PropertyField(description);
         EditorGUILayout.PropertyField(power);
+        EditorGUILayout.EndVertical();
 
         cardAsset.ApplyModifiedProperties();
 
