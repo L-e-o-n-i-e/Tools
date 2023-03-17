@@ -7,10 +7,10 @@ using System;
 [System.Serializable]
 public class CardAssetInfo : ScriptableObject
 {
+    public Sprite sprite;
     public string cardName;
     public int mana;
     public Color color;
-    public Sprite sprite;
     public string  description;
     [Range(0, 5)]
     public int power;

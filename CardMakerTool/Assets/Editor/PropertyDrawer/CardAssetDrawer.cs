@@ -19,17 +19,11 @@ public class CardAssetDrawer : Editor
     public void OnEnable()
     {
         cardAsset = new SerializedObject(target);          //target is MovementController
+        color = cardAsset.FindProperty("color");
         cardName = cardAsset.FindProperty("cardName");   //Use reflection to find a variable (property) in the target project
         mana = cardAsset.FindProperty("mana");
-        color = cardAsset.FindProperty("color");
         sprite = cardAsset.FindProperty("sprite");
-        Sprite spriteText = (Sprite)sprite.objectReferenceValue;
-        if(spriteText != null)
-        {
-            Texture2D texture = new Texture2D((int)spriteText.rect.width, (int)spriteText.rect.height, TextureFormat.RGBA32, false);
-            texture.SetPixels(spriteText.texture.GetPixels((int)spriteText.rect.x, (int)spriteText.rect.y, (int)spriteText.rect.width, (int)spriteText.rect.height));
-            texture.Apply();
-        }
+      
         description = cardAsset.FindProperty("description");
         power = cardAsset.FindProperty("power"); 
     }
@@ -38,18 +32,27 @@ public class CardAssetDrawer : Editor
     public override void OnInspectorGUI()
     {
         Debug.Log("Override Inspector Card Asset");
-
+        cardAsset.Update();
 
         GUILayout.Label("Card Assets", EditorStyles.boldLabel);
         
         EditorGUILayout.PropertyField(cardName);                        
         EditorGUILayout.PropertyField(mana);                        
         EditorGUILayout.PropertyField(color);                        
-        EditorGUILayout.PropertyField(sprite);                        
+        EditorGUILayout.PropertyField(sprite);
+        Sprite spriteText = (Sprite)sprite.objectReferenceValue;
+        if (spriteText != null)
+        {
+            Texture2D texture = new Texture2D((int)spriteText.rect.width, (int)spriteText.rect.height, TextureFormat.RGBA32, false);
+            texture.SetPixels(spriteText.texture.GetPixels((int)spriteText.rect.x, (int)spriteText.rect.y, (int)spriteText.rect.width, (int)spriteText.rect.height));
+            Debug.Log("Sprite " + spriteText.name + " Converting to texture " + texture.name);
+            texture.Apply();
+        }
         EditorGUILayout.PropertyField(description);                         
         EditorGUILayout.PropertyField(power);
 
-        
+        cardAsset.ApplyModifiedProperties();
+
     }
 
 }
