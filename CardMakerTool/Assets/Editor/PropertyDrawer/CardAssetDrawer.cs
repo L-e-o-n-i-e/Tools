@@ -12,7 +12,7 @@ public class CardAssetDrawer : Editor
     private SerializedProperty cardName;
     private SerializedProperty mana;
     private SerializedProperty color;
-    private SerializedProperty sprite;
+    private SerializedProperty spriteProperty;
     private SerializedProperty description;
     private SerializedProperty power;
 
@@ -24,7 +24,7 @@ public class CardAssetDrawer : Editor
         color = cardAsset.FindProperty("color");
         cardName = cardAsset.FindProperty("cardName");   //Use reflection to find a variable (property) in the target project
         mana = cardAsset.FindProperty("mana");
-        sprite = cardAsset.FindProperty("sprite");
+        spriteProperty = cardAsset.FindProperty("sprite");
 
         description = cardAsset.FindProperty("description");
         power = cardAsset.FindProperty("power");
@@ -43,12 +43,22 @@ public class CardAssetDrawer : Editor
         EditorGUILayout.PropertyField(mana);
         EditorGUILayout.PropertyField(color);
         
-        Sprite sprite = (Sprite)cardAsset.FindProperty("sprite").objectReferenceValue;
+        Sprite sprite = (Sprite)spriteProperty.objectReferenceValue;
         if (sprite != null)
         {
             GUILayout.Label(sprite.texture, GUILayout.MaxHeight(300f));
+            Rect previewRect = GUILayoutUtility.GetLastRect();
+
+            Event e = Event.current;
+            if (e.type == EventType.MouseDown && previewRect.Contains(e.mousePosition))
+            {
+                //C:\ISI\Tools\CardMakerTool\Assets\Resources\Sprites
+                EditorUtility.RevealInFinder(Application.dataPath + "/Resources/Sprites/" + sprite.name);
+                //string path = AssetDatabase.GetAssetPath(sprite);
+                //EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(path));
+            }
         }
-        
+
 
         EditorGUILayout.PropertyField(description);
         EditorGUILayout.PropertyField(power);
