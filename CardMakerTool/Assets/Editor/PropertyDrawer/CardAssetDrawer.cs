@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-//Attribute Inspector
 [CustomEditor(typeof(CardAssetInfo))]
 public class CardAssetDrawer : Editor
 {
@@ -29,8 +28,7 @@ public class CardAssetDrawer : Editor
         description = cardAsset.FindProperty("description");
         power = cardAsset.FindProperty("power");
     }
-
-    //On inspector
+    
     public override void OnInspectorGUI()
     {
         Debug.Log("Override Inspector Card Asset");
@@ -52,10 +50,12 @@ public class CardAssetDrawer : Editor
             Event e = Event.current;
             if (e.type == EventType.MouseDown && previewRect.Contains(e.mousePosition))
             {
-                //C:\ISI\Tools\CardMakerTool\Assets\Resources\Sprites
-                EditorUtility.RevealInFinder(Application.dataPath + "/Resources/Sprites/" + sprite.name);
-                //string path = AssetDatabase.GetAssetPath(sprite);
-                //EditorGUIUtility.PingObject(AssetDatabase.LoadAssetAtPath<Object>(path));
+                string path = AssetDatabase.GetAssetPath(sprite);
+                string absPath = EditorUtility.OpenFilePanel("Select Asset", path, "png,jpg,jpeg");
+                if (absPath.StartsWith(Application.dataPath))
+                {
+                    //TODO
+                }
             }
         }
 
