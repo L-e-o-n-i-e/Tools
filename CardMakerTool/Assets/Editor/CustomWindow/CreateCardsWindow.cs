@@ -9,7 +9,6 @@ public class CreateCardsWindow : EditorWindow
     [MenuItem("Custom Tools/ Create Card")] //This the function below it as a menu item, which appears in the tool bar
     public static void CreateShowcase() //Menu items can call STATIC functions, does not work for non-static since Editor scripts cannot be attached to objects
     {
-        Debug.Log("Create window custom");
         EditorWindow window = GetWindow<CreateCardsWindow>("Create Card");
         window.minSize = new Vector2(700, 600);
     }
@@ -73,10 +72,8 @@ public class CreateCardsWindow : EditorWindow
         if (GUILayout.Button("Previous"))
         {
             index = index == 0 ? selectedCards.Length - 1 : index - 1;
-
             selectedCardEditor = Editor.CreateEditor(selectedCards[index]);
             Debug.Log("Previous button clicked");
-            Debug.Log(selectedCards[index].cardName);
         }
     }
 
@@ -84,10 +81,9 @@ public class CreateCardsWindow : EditorWindow
     {
         if (GUILayout.Button("Next"))
         {
-            index =( index + 1) % selectedCards.Length;
+            index = (index + 1) % selectedCards.Length;
             selectedCardEditor = Editor.CreateEditor(selectedCards[index]);
             Debug.Log("Next button clicked");
-            Debug.Log(selectedCards[index].cardName);
         }
     }
 
@@ -95,8 +91,19 @@ public class CreateCardsWindow : EditorWindow
     {
         if (GUILayout.Button("Load"))
         {
-            //Pops up the file explorer, and give you the power to chose a scriptable object, AND displays it.
-            Debug.Log("Load button clicked");
+            //Pops up the file explorer, and give you the power to chose a scriptable object, AND displays it.            
+            //string path = AssetDatabase.GetAssetPath(selectedCards[index]);
+            string path = Application.dataPath + "/Resources/CardsTemplate/";
+            
+            string absPath = EditorUtility.OpenFilePanel("Select Scriptable Object", path, "asset");
+            Debug.Log("Returning AbsPath" + absPath);
+            if (absPath != null)
+            {
+                string scriptObjName = System.IO.Path.GetFileNameWithoutExtension(absPath);
+                CardAssetInfo newScriptObj = Resources.Load<CardAssetInfo>("CardsTemplate/" + scriptObjName);
+                index = FindIndexOf(newScriptObj);
+                selectedCardEditor = Editor.CreateEditor(selectedCards[index]);
+            }
         }
     }
 
@@ -132,7 +139,21 @@ public class CreateCardsWindow : EditorWindow
     //GAUCHE : haut en bas
     //File Name : displaying name of the card
     //Button : Previous card
-    
+    int FindIndexOf(CardAssetInfo cardToFind)
+    {
+        Debug.Log(cardToFind.cardName);
+        int index = -1;
+        for (int i = 0; i < selectedCards.Length; i++)
+        {
+            Debug.Log(selectedCards[i].cardName);
+
+            if (cardToFind.cardName.Equals(selectedCards[i].cardName))
+                index = i;
+
+        }
+        Debug.Log("returning index : " + index);
+        return index;
+    }
 
 }
 
