@@ -111,8 +111,8 @@ public class CreateCardsWindow : EditorWindow
     {
         if (GUILayout.Button("Go To File"))
         {
-            //Opening Project Window and selecting by default that scriptable object
-            Debug.Log("GoToFile button clicked");
+            Selection.activeObject = selectedCards[index];            
+            EditorUtility.FocusProjectWindow();
         }
     }
 
