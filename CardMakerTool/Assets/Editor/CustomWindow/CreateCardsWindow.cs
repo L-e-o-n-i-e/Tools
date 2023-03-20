@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;  //Required for MenuItem, means that this is an Editor script, must be placed in an Editor folder, and cannot be compiled!
-using System.Linq;  //Used for Select
+using UnityEditor;  
+using System.Linq;  
 
 public class CreateCardsWindow : EditorWindow
 {
-    [MenuItem("Custom Tools/ Create Card")] //This the function below it as a menu item, which appears in the tool bar
-    public static void CreateShowcase() //Menu items can call STATIC functions, does not work for non-static since Editor scripts cannot be attached to objects
+    [MenuItem("Custom Tools/ Create Card")] 
+    public static void CreateShowcase() 
     {
         EditorWindow window = GetWindow<CreateCardsWindow>("Create Card");
         window.minSize = new Vector2(700, 600);
@@ -18,7 +18,7 @@ public class CreateCardsWindow : EditorWindow
     int index;
     bool initialized = false;
 
-    void OnGUI() //Called every frame in Editor window
+    void OnGUI()
     {
         if (!initialized)
         {
@@ -68,7 +68,6 @@ public class CreateCardsWindow : EditorWindow
     }
     void DisplayPreviousButton()
     {
-
         if (GUILayout.Button("Previous"))
         {
             index = index == 0 ? selectedCards.Length - 1 : index - 1;
@@ -91,8 +90,6 @@ public class CreateCardsWindow : EditorWindow
     {
         if (GUILayout.Button("Load"))
         {
-            //Pops up the file explorer, and give you the power to chose a scriptable object, AND displays it.            
-            //string path = AssetDatabase.GetAssetPath(selectedCards[index]);
             string path = Application.dataPath + "/Resources/CardsTemplate/";
             
             string absPath = EditorUtility.OpenFilePanel("Select Scriptable Object", path, "asset");
@@ -120,8 +117,25 @@ public class CreateCardsWindow : EditorWindow
     {
         if (GUILayout.Button("Create New Card"))
         {
-
             Debug.Log("CreateNewCard button clicked");
+            CardAssetInfo scriptableObject = ScriptableObject.CreateInstance<CardAssetInfo>();
+
+            // Set any properties you want to save
+            scriptableObject.cardName = selectedCards[index].cardName;
+            scriptableObject.mana = selectedCards[index].mana;
+            scriptableObject.color = selectedCards[index].color;
+            scriptableObject.sprite = selectedCards[index].sprite;
+            scriptableObject.description = selectedCards[index].description;
+            scriptableObject.power = selectedCards[index].power;
+
+            // Create a new asset at the specified path
+            string assetPath = "Assets/Resources/CardsTemplate/" + selectedCards[index].cardName + ".asset";
+            AssetDatabase.CreateAsset(scriptableObject, assetPath);
+            AssetDatabase.SaveAssets();
+
+            // Focus the Project window on the new asset
+            EditorUtility.FocusProjectWindow();
+            Selection.activeObject = scriptableObject;
         }
     }
 
@@ -129,31 +143,21 @@ public class CreateCardsWindow : EditorWindow
     {
         GUILayout.BeginVertical();
         DisplayEmptyRect(200, 50);
-        GUILayout.Label("Banane", EditorStyles.largeLabel);
         selectedCardEditor.OnInspectorGUI();
 
 
         GUILayout.EndVertical();
     }
-
-    //GAUCHE : haut en bas
-    //File Name : displaying name of the card
-    //Button : Previous card
+    
     int FindIndexOf(CardAssetInfo cardToFind)
     {
-        Debug.Log(cardToFind.cardName);
         int index = -1;
         for (int i = 0; i < selectedCards.Length; i++)
         {
-            Debug.Log(selectedCards[i].cardName);
-
             if (cardToFind.cardName.Equals(selectedCards[i].cardName))
                 index = i;
-
         }
         Debug.Log("returning index : " + index);
         return index;
     }
-
 }
-
