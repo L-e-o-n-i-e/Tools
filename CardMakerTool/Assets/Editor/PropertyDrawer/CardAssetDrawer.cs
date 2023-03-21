@@ -19,12 +19,11 @@ public class CardAssetDrawer : Editor
 
     public void OnEnable()
     {
-        cardAsset = new SerializedObject(target);          //target is MovementController
+        cardAsset = new SerializedObject(target);     
         color = cardAsset.FindProperty("color");
-        cardName = cardAsset.FindProperty("cardName");   //Use reflection to find a variable (property) in the target project
+        cardName = cardAsset.FindProperty("cardName");  
         mana = cardAsset.FindProperty("mana");
         spriteProperty = cardAsset.FindProperty("sprite");
-
         description = cardAsset.FindProperty("description");
         power = cardAsset.FindProperty("power");
     }
@@ -50,7 +49,6 @@ public class CardAssetDrawer : Editor
             Event e = Event.current;
             if (e.type == EventType.MouseDown && previewRect.Contains(e.mousePosition))
             {
-                //Application.dataPath + "/Resources/Sprites/"
                 string path = AssetDatabase.GetAssetPath(sprite);
                 string absPath = EditorUtility.OpenFilePanel("Select Asset", path, "png,jpg,jpeg");
                 if (absPath.StartsWith(Application.dataPath))

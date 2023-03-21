@@ -109,7 +109,9 @@ public class CreateCardsWindow : EditorWindow
     {
         if (GUILayout.Button("Go To File"))
         {
-            Selection.activeObject = selectedCards[index];
+            CardAssetInfo[] originals = Resources.LoadAll<CardAssetInfo>("CardsTemplate/");
+           
+            Selection.activeObject = originals[index];
             EditorUtility.FocusProjectWindow();
         }
     }
@@ -148,7 +150,7 @@ public class CreateCardsWindow : EditorWindow
     {
         GUILayout.BeginVertical();
         DisplayEmptyRect(200, 50);
-      
+
         selectedCardEditor.OnInspectorGUI();
 
         GUILayout.EndVertical();
@@ -171,20 +173,25 @@ public class CreateCardsWindow : EditorWindow
         CardAssetInfo[] originals = Resources.LoadAll<CardAssetInfo>("CardsTemplate/");
         selectedCards = new CardAssetInfo[originals.Length];
 
-        for (int i = 0; i < originals.Length; i++)
+        if (originals.Length < 0)
+            throw new System.Exception("No scriptable objects in the file CardsTemplate. Nothing to display.");
+        else
         {
-            //Create a copy of the scriptable Object not to modify directly the original
-            CardAssetInfo newSO = ScriptableObject.CreateInstance<CardAssetInfo>();
+            for (int i = 0; i < originals.Length; i++)
+            {
+                //Create a copy of the scriptable Object not to modify directly the original
+                CardAssetInfo newSO = ScriptableObject.CreateInstance<CardAssetInfo>();
 
-            // Set any properties you want to save
-            newSO.cardName = originals[i].cardName;
-            newSO.mana = originals[i].mana;
-            newSO.color = originals[i].color;
-            newSO.sprite = originals[i].sprite;
-            newSO.description = originals[i].description;
-            newSO.power = originals[i].power;
-            
-            selectedCards[i] = newSO;
+                // Set any properties you want to save
+                newSO.cardName = originals[i].cardName;
+                newSO.mana = originals[i].mana;
+                newSO.color = originals[i].color;
+                newSO.sprite = originals[i].sprite;
+                newSO.description = originals[i].description;
+                newSO.power = originals[i].power;
+
+                selectedCards[i] = newSO;
+            }
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-//[CreateAssetMenu(fileName = "NewCard", menuName = "Card")]
 [System.Serializable]
 public class CardAssetInfo : ScriptableObject
 {
