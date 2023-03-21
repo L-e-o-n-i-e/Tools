@@ -14,8 +14,7 @@ public class CardAssetDrawer : Editor
     private SerializedProperty spriteProperty;
     private SerializedProperty description;
     private SerializedProperty power;
-
-    Rect texturePos;
+    
 
     public void OnEnable()
     {
@@ -33,7 +32,7 @@ public class CardAssetDrawer : Editor
         Debug.Log("Override Inspector Card Asset");
         cardAsset.Update();
         
-        GUILayout.Label("Card Assets", EditorStyles.boldLabel);
+        //GUILayout.Label("Card Assets", EditorStyles.boldLabel);
         EditorGUILayout.BeginVertical();
 
         EditorGUILayout.PropertyField(cardName);
@@ -55,7 +54,6 @@ public class CardAssetDrawer : Editor
                 {
                     Debug.Log("selected file is :" + absPath);
                     string spriteName = System.IO.Path.GetFileNameWithoutExtension(absPath);
-                    Debug.Log(spriteName);
                     Sprite newSprite = Resources.Load<Sprite>("Sprites/" + spriteName);
                     spriteProperty.objectReferenceValue = newSprite;
                 }
@@ -68,7 +66,6 @@ public class CardAssetDrawer : Editor
         EditorGUILayout.EndVertical();
 
         cardAsset.ApplyModifiedProperties();
-
     }
 
 }

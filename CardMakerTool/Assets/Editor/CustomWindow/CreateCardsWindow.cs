@@ -6,11 +6,14 @@ using System.Linq;
 
 public class CreateCardsWindow : EditorWindow
 {
+    static int WIDTH = 700;
+    static int HEIGHT = 600;
+
     [MenuItem("Custom Tools/ Create Card")]
     public static void CreateShowcase()
     {
         EditorWindow window = GetWindow<CreateCardsWindow>("Create Card");
-        window.minSize = new Vector2(700, 600);
+        window.minSize = new Vector2(WIDTH, HEIGHT);
     }
 
     CardAssetInfo[] selectedCards;
@@ -27,9 +30,9 @@ public class CreateCardsWindow : EditorWindow
             index = 0;
             selectedCardEditor = Editor.CreateEditor(selectedCards[index]);
             initialized = true;
-        }
-
-        GUILayout.BeginHorizontal();
+        }     
+        
+        GUILayout.BeginHorizontal();       
         DisplayLeftRect();
         DisplayMiddleRect();
         DisplayRightRect();
@@ -37,16 +40,17 @@ public class CreateCardsWindow : EditorWindow
     }
 
     void DisplayLeftRect()
-    {
+    {    
         GUILayout.BeginVertical();
-        DisplayEmptyRect(100, 150);
+        DisplayEmptyRect(100, 150);   
+
         DisplayPreviousButton();
         GUILayout.EndVertical();
     }
 
     void DisplayMiddleRect()
     {
-        GUILayout.BeginVertical();
+        GUILayout.BeginVertical();  
         DisplayCard();
         DisplayCreateCardButton();
         GUILayout.EndVertical();
@@ -110,7 +114,7 @@ public class CreateCardsWindow : EditorWindow
         if (GUILayout.Button("Go To File"))
         {
             CardAssetInfo[] originals = Resources.LoadAll<CardAssetInfo>("CardsTemplate/");
-           
+
             Selection.activeObject = originals[index];
             EditorUtility.FocusProjectWindow();
         }
@@ -148,11 +152,12 @@ public class CreateCardsWindow : EditorWindow
 
     void DisplayCard()
     {
+        //Sprite sprite = Resources.Load<Sprite>("Sprites/CardBackground/cardBackground");
+        //GUI.Box(new Rect(position.x, position.y, sprite.textureRect.width, sprite.textureRect.height), new GUIContent(sprite.texture));
         GUILayout.BeginVertical();
         DisplayEmptyRect(200, 50);
-
         selectedCardEditor.OnInspectorGUI();
-
+        DisplayEmptyRect(200, 50);               
         GUILayout.EndVertical();
     }
 
