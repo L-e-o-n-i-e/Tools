@@ -7,6 +7,6 @@ public class TODO : MonoBehaviour
     //Custom Window :
         
         //Display the data side to side at first
-        //Create Card Button : Saves a new card in the scriptable objects file
-
+        //Load Button is broken
+        //What if : no scriptable object in the file yet ?
 }

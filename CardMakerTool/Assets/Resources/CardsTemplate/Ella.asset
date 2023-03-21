@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ella
   m_EditorClassIdentifier: 
   sprite: {fileID: 21300000, guid: 058a0f8a61bb50943b403f1195607231, type: 3}
-  cardName: Ella
+  cardName: Bougie
   mana: 3
   color: {r: 0.29842067, g: 1, b: 0, a: 0}
   description: Bring your soul back to life

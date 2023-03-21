@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;  
-using System.Linq;  
+using UnityEditor;
+using System.Linq;
 
 public class CreateCardsWindow : EditorWindow
 {
-    [MenuItem("Custom Tools/ Create Card")] 
-    public static void CreateShowcase() 
+    [MenuItem("Custom Tools/ Create Card")]
+    public static void CreateShowcase()
     {
         EditorWindow window = GetWindow<CreateCardsWindow>("Create Card");
         window.minSize = new Vector2(700, 600);
@@ -22,7 +22,8 @@ public class CreateCardsWindow : EditorWindow
     {
         if (!initialized)
         {
-            selectedCards = Resources.LoadAll<CardAssetInfo>("CardsTemplate/");
+            //selectedCards = Resources.LoadAll<CardAssetInfo>("CardsTemplate/");
+            ResetCardsList();
             index = 0;
             selectedCardEditor = Editor.CreateEditor(selectedCards[index]);
             initialized = true;
@@ -91,7 +92,7 @@ public class CreateCardsWindow : EditorWindow
         if (GUILayout.Button("Load"))
         {
             string path = Application.dataPath + "/Resources/CardsTemplate/";
-            
+
             string absPath = EditorUtility.OpenFilePanel("Select Scriptable Object", path, "asset");
             Debug.Log("Returning AbsPath" + absPath);
             if (absPath != null)
@@ -108,7 +109,7 @@ public class CreateCardsWindow : EditorWindow
     {
         if (GUILayout.Button("Go To File"))
         {
-            Selection.activeObject = selectedCards[index];            
+            Selection.activeObject = selectedCards[index];
             EditorUtility.FocusProjectWindow();
         }
     }
@@ -136,6 +137,10 @@ public class CreateCardsWindow : EditorWindow
             // Focus the Project window on the new asset
             EditorUtility.FocusProjectWindow();
             Selection.activeObject = scriptableObject;
+
+            //Reset the list of Cards
+            //selectedCards = Resources.LoadAll<CardAssetInfo>("CardsTemplate/");
+            ResetCardsList();
         }
     }
 
@@ -143,12 +148,12 @@ public class CreateCardsWindow : EditorWindow
     {
         GUILayout.BeginVertical();
         DisplayEmptyRect(200, 50);
+      
         selectedCardEditor.OnInspectorGUI();
-
 
         GUILayout.EndVertical();
     }
-    
+
     int FindIndexOf(CardAssetInfo cardToFind)
     {
         int index = -1;
@@ -159,5 +164,27 @@ public class CreateCardsWindow : EditorWindow
         }
         Debug.Log("returning index : " + index);
         return index;
+    }
+
+    void ResetCardsList()
+    {
+        CardAssetInfo[] originals = Resources.LoadAll<CardAssetInfo>("CardsTemplate/");
+        selectedCards = new CardAssetInfo[originals.Length];
+
+        for (int i = 0; i < originals.Length; i++)
+        {
+            //Create a copy of the scriptable Object not to modify directly the original
+            CardAssetInfo newSO = ScriptableObject.CreateInstance<CardAssetInfo>();
+
+            // Set any properties you want to save
+            newSO.cardName = originals[i].cardName;
+            newSO.mana = originals[i].mana;
+            newSO.color = originals[i].color;
+            newSO.sprite = originals[i].sprite;
+            newSO.description = originals[i].description;
+            newSO.power = originals[i].power;
+            
+            selectedCards[i] = newSO;
+        }
     }
 }
