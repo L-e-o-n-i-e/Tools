@@ -2,11 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IManagable<DataType>
+public interface IManagable<DataType, ObjectType, EnumType>
 {
-    void Initialize(DataType stats);
+    void Initialize(DataType stats, EnumType enumType);
     void Refresh();
     void FixedRefresh();
     void Delete();
+    bool IsActive();
+    EnumType GetEnumType();
+    ObjectType GetObjType();
+
+    DataType GetStats();
+    
 
 }

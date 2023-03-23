@@ -5,7 +5,7 @@ using System.Linq;
 
 
 
-public class Factory<EnumType, ObjectType, DataType> where ObjectType : MonoBehaviour, IManagable<DataType>
+public class Factory<EnumType, ObjectType, DataType> where ObjectType : MonoBehaviour, IManagable<DataType, ObjectType, EnumType>
 {
     Dictionary<EnumType, ObjectType> ressourcesDict;
 
@@ -30,6 +30,7 @@ public class Factory<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
 
     public ObjectType CreateObject(EnumType type, DataType stats)
     {
+        Debug.Log("Factory is creating an object");
         //Ask Pool if there is an object in the pool
         ObjectType obj = PoolGeneric<EnumType, ObjectType, DataType>.Instance.DePool(type);
         if(obj == null)
@@ -39,7 +40,7 @@ public class Factory<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
         }
 
         //Initialize it
-        obj.Initialize(stats);
+        obj.Initialize(stats, obj.GetEnumType());
 
         return obj;
     }

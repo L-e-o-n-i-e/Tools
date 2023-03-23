@@ -284,5 +284,12 @@ namespace ExtensionFunctions
             arr[3] = q.w;
             return arr;
         }
+        public static Vector3 RandomStartPosition(Transform worldBounds)
+        {
+            float x = UnityEngine.Random.Range(-worldBounds.localScale.x, worldBounds.localScale.x);
+            float y = UnityEngine.Random.Range(-worldBounds.localScale.y, worldBounds.localScale.y);
+
+            return new Vector3(x, y, 0);
+        }
     }
 }
