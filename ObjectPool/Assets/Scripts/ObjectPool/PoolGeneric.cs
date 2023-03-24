@@ -1,6 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ExtensionFunctions;
+using System.Reflection;
+using System;
+using System.Linq;
 
 public class PoolGeneric<EnumType, ObjectType, DataType> where ObjectType : MonoBehaviour, IManagable<DataType, ObjectType, EnumType>
 {
@@ -22,21 +26,25 @@ public class PoolGeneric<EnumType, ObjectType, DataType> where ObjectType : Mono
     public void Instantiate()
     {
         objDict = new Dictionary<EnumType, Queue<ObjectType>>();
+
+        EnumType[] values = ExtensionFunctions.ExtensionFuncs.GetEnumValues<EnumType>();
+        foreach (EnumType value in values)
+        {
+            Debug.Log("Nouveau type enum dans dictionnaire : " + value);
+            objDict.Add(value, new Queue<ObjectType>());
+        }
     }
 
     public void Pool(EnumType type, ObjectType obj)
     {
         Debug.Log($"Taking object of type : {type} to the pool.");
-        if (!objDict.ContainsKey(type))
-        {
-            objDict.Add(type, new Queue<ObjectType>());
-        }
-        objDict[type].Enqueue(obj);
 
+        objDict[type].Enqueue(obj);
     }
 
     public ObjectType DePool(EnumType type)
     {
-        return (objDict.Count > 0) ? objDict[type].Dequeue() : null;
+        //return (objDict.Count > 0) ? objDict[type].Dequeue() : null;
+        return (objDict[type].Count > 0) ? objDict[type].Dequeue() : null;
     }
 }

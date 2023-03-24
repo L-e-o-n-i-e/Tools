@@ -37,6 +37,7 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
     {
         this.stats = stats;
         isActive = true;
+        gameObject.SetActive(true);
         this.enemyType = enumType;
         this.transform.SetParent(this.stats.parent);
     }
@@ -51,15 +52,7 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
         //TODO
 
     }
-
-    //private void OnCollisionEnter2D(Collision collision)
-    //{
-    //    if( collision.transform.tag.CompareTo("Player") == 0)
-    //    {
-    //        Delete();
-    //        Debug.Log("Enemy " + transform.name + " was hit by player");
-    //    }
-    //}
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.transform.tag.CompareTo("Player") == 0)

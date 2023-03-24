@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using System.Reflection;
+
 namespace ExtensionFunctions
 {
     public static class ExtensionFuncs              //static required
@@ -290,6 +292,16 @@ namespace ExtensionFunctions
             float y = UnityEngine.Random.Range(-worldBounds.localScale.y, worldBounds.localScale.y);
 
             return new Vector3(x, y, 0);
+        }
+
+        public static T[] GetEnumValues<T>() 
+        {
+            if (!typeof(T).IsEnum)
+            {
+                throw new ArgumentException("Type parameter T must be an enum type.");
+            }
+
+            return Enum.GetValues(typeof(T)).Cast<T>().ToArray();
         }
     }
 }

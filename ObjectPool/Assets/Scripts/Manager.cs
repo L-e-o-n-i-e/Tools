@@ -38,9 +38,8 @@ public class Manager<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
         foreach (IManagable<DataType, ObjectType, EnumType> obj in collection)
         {
             if (obj.IsActive())
-            {
-                //Do refresh
-            }
+                obj.Refresh();
+
             else
             {
                 objToRemove.Add(obj);
@@ -49,11 +48,7 @@ public class Manager<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
         }
     }
 
-    public void Add(IManagable<DataType, ObjectType, EnumType> objToAdd)
-    {
-        collection.Add(objToAdd);
-    }
-    
+
     public void SpawnEnemy(EnumType enumType, DataType dataType, int nbEnemies = 1)
     {
         for (int i = 0; i < nbEnemies; i++)
