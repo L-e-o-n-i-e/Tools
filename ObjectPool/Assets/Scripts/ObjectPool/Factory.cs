@@ -11,7 +11,6 @@ public class Factory<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
 
     public void Instantiate()
     {
-        Debug.Log("Instantiate Factory");
         //Initialize the resources dictionary
         ressourcesDict = new Dictionary<EnumType, ObjectType>();
         //Declare all different types of object in the dictionary
@@ -20,17 +19,12 @@ public class Factory<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
         foreach (EnumType type in enums)
         {
             ObjectType obj =  Resources.Load<ObjectType>("Prefabs/Enemy/" + type.ToString());
-            ressourcesDict.Add(type, obj);
-            foreach (var item in ressourcesDict)
-            {
-                Debug.Log("Dict key : " + item.Key + " value : " + item.Value);
-            }
+            ressourcesDict.Add(type, obj);           
         }
     }
 
     public ObjectType CreateObject(EnumType type, DataType stats)
     {
-        Debug.Log("Factory is creating an object");
         //Ask Pool if there is an object in the pool
         ObjectType obj = PoolGeneric<EnumType, ObjectType, DataType>.Instance.DePool(type);
         if(obj == null)

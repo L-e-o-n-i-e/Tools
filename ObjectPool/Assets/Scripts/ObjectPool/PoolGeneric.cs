@@ -30,15 +30,12 @@ public class PoolGeneric<EnumType, ObjectType, DataType> where ObjectType : Mono
         EnumType[] values = ExtensionFunctions.ExtensionFuncs.GetEnumValues<EnumType>();
         foreach (EnumType value in values)
         {
-            Debug.Log("Nouveau type enum dans dictionnaire : " + value);
             objDict.Add(value, new Queue<ObjectType>());
         }
     }
 
     public void Pool(EnumType type, ObjectType obj)
     {
-        Debug.Log($"Taking object of type : {type} to the pool.");
-
         objDict[type].Enqueue(obj);
     }
 

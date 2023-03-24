@@ -61,7 +61,6 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
         if (collision.transform.tag.CompareTo("Player") == 0)
         {
             Delete();
-            Debug.Log("Enemy " + transform.name + " was hit by player");
         }
     }
 
