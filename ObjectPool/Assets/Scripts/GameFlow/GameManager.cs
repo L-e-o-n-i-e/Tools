@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ExtensionFunctions;
 
 public enum EnemyType { FishLamp, Shark, Ray }
 
@@ -18,7 +19,7 @@ public class GameManager : MonoBehaviour
 
     #region Timer
     float timeToSpawnEnemy = 0;
-    float waitBeforeSpawnEnemy = 5.0f;
+    public float waitBeforeSpawnEnemy = 5.0f;
     #endregion
 
     private void Start()
@@ -51,17 +52,23 @@ public class GameManager : MonoBehaviour
         //After a certain time, spawn new enemies
         if (Time.time >= timeToSpawnEnemy)
         {
-            InstantiateEnemies(1);
+            InstantiateEnemies(50);
             timeToSpawnEnemy = Time.time + waitBeforeSpawnEnemy;
         }
     }
 
-    private void InstantiateEnemies(int nbOfEnemies =1)
+    private void FixedUpdate()
     {
-        
+        enemyManager.FixedRefresh();
+    }
+
+    private void InstantiateEnemies(int nbOfEnemies =1)
+    {        
         for (int i = 0; i < nbOfEnemies; i++)
         {
-            enemyManager.SpawnEnemy((EnemyType)enenyTypeIndex, new ObjStats(2 + i, enemyParent));
+            //Set Random Position
+            Vector3 position = ExtensionFunctions.ExtensionFuncs.RandomStartPosition(worldBounds);
+            enemyManager.SpawnEnemy((EnemyType)enenyTypeIndex, new ObjStats(2 + i, enemyParent, position.ToFloatArr()));
             //Switch in between different types of enemies in the enum:
             enenyTypeIndex = ++enenyTypeIndex % Enum.GetNames(typeof(EnemyType)).Length;
         }

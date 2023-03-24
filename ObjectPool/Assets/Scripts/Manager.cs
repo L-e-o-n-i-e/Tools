@@ -48,6 +48,10 @@ public class Manager<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
         }
     }
 
+    public void FixedRefresh()
+    {
+        //To Implement
+    }
 
     public void SpawnEnemy(EnumType enumType, DataType dataType, int nbEnemies = 1)
     {

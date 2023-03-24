@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ExtensionFunctions;
 
 public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
 {
@@ -40,6 +41,7 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
         gameObject.SetActive(true);
         this.enemyType = enumType;
         this.transform.SetParent(this.stats.parent);
+        transform.position = this.stats.position.ToVector3();
     }
 
     public bool IsActive()
@@ -50,6 +52,7 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
     public void Refresh()
     {
         //TODO
+        this.stats.position = transform.position.ToFloatArr();
 
     }
     
@@ -72,10 +75,13 @@ public class ObjStats
 {
     int hp;
     public Transform parent;
+    public float[] position;
+    
 
-    public ObjStats(int hp, Transform parent)
+    public ObjStats(int hp, Transform parent, float[] position)
     {
         this.hp = hp;
         this.parent = parent;
+        this.position = position;
     }
 }
