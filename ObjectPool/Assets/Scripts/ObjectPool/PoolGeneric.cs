@@ -23,7 +23,7 @@ public class PoolGeneric<EnumType, ObjectType, DataType> where ObjectType : Mono
     }
     #endregion
 
-    public void Instantiate()
+    public void FirstEverInitialize()
     {
         objDict = new Dictionary<EnumType, Queue<ObjectType>>();
 

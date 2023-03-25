@@ -40,7 +40,6 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
         isActive = true;
         gameObject.SetActive(true);
         this.enemyType = enumType;
-        this.transform.SetParent(this.stats.parent);
         transform.position = this.stats.position.ToVector3();
     }
 
@@ -73,14 +72,12 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
 public class ObjStats
 {
     int hp;
-    public Transform parent;
     public float[] position;
     
 
-    public ObjStats(int hp, Transform parent, float[] position)
+    public ObjStats(int hp,  float[] position)
     {
         this.hp = hp;
-        this.parent = parent;
         this.position = position;
     }
 }

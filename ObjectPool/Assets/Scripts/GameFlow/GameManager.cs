@@ -10,8 +10,6 @@ public class GameManager : MonoBehaviour
 {
     public int nbObEnemies = 3;
     public Transform worldBounds;
-    private Transform enemyParent;
-    private Transform poolParent;
 
     private Factory<EnemyType, Test, ObjStats> factory;
     private Manager<EnemyType, Test, ObjStats> enemyManager;
@@ -24,23 +22,14 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        #region Parents
-        //Empty object in hierarchy to receive the enemies to be pooled and help debugging
-        GameObject pool = new GameObject("Pool");
-        poolParent = pool.transform;
-        //Empty objects to receive active objects during the game
-        GameObject enemyGO = new GameObject("Active Enemies");
-        enemyParent = enemyGO.transform;
-        #endregion
-
         #region Object Pool Trio
         factory = new Factory<EnemyType, Test, ObjStats>();
         factory.Instantiate();
 
-        PoolGeneric<EnemyType, Test, ObjStats>.Instance.Instantiate();
+        PoolGeneric<EnemyType, Test, ObjStats>.Instance.FirstEverInitialize();
 
         enemyManager = new Manager<EnemyType, Test, ObjStats>();
-        enemyManager.Initialize(factory, worldBounds, poolParent, enemyParent);
+        enemyManager.Initialize(factory, worldBounds);
         #endregion
 
         timeToSpawnEnemy = Time.time + waitBeforeSpawnEnemy;
@@ -68,7 +57,7 @@ public class GameManager : MonoBehaviour
         {
             //Set Random Position
             Vector3 position = ExtensionFunctions.ExtensionFuncs.RandomStartPosition(worldBounds);
-            enemyManager.SpawnEnemy((EnemyType)enenyTypeIndex, new ObjStats(2 + i, enemyParent, position.ToFloatArr()));
+            enemyManager.Spawn((EnemyType)enenyTypeIndex, new ObjStats(2 + i, position.ToFloatArr()));
             //Switch in between different types of enemies in the enum:
             enenyTypeIndex = ++enenyTypeIndex % Enum.GetNames(typeof(EnemyType)).Length;
         }

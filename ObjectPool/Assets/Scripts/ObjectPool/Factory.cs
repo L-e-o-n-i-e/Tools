@@ -31,10 +31,7 @@ public class Factory<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
         {
             //If not, create one
            obj = GameObject.Instantiate<ObjectType>(ressourcesDict[type]);    
-        }
-
-        //Initialize it
-        obj.Initialize(stats, obj.GetEnumType());
+        }        
 
         return obj;
     }

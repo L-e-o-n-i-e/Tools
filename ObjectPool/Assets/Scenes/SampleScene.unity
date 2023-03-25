@@ -367,8 +367,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2fbab7502a8eefa4992a63d36c48dd78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nbObEnemies: 3
+  nbObEnemies: 15
   worldBounds: {fileID: 1138023592}
+  waitBeforeSpawnEnemy: 5
 --- !u!1001 &2656411430204590441
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -6,6 +6,15 @@ public class TODO : MonoBehaviour
 {
     //Condition to create the enemy
     //Reset position of the object when depooled
+
+    //GameManager 
+        //Make it into a singleton/MonoBehaviour
+        //DontDestroOnLoad
+
+    //Manager
+        //Get()
+        //Add()
+        //Update()
         
 
 }

@@ -6,32 +6,31 @@ using ExtensionFunctions;
 public class Manager<EnumType, ObjectType, DataType> where ObjectType : MonoBehaviour, IManagable<DataType, ObjectType, EnumType>
 {
     HashSet<IManagable<DataType, ObjectType, EnumType>> collection;
-    List<IManagable<DataType, ObjectType, EnumType>> objToRemove;
+    List<IManagable<DataType, ObjectType, EnumType>> objectsToRemove;
     Factory<EnumType, ObjectType, DataType> factory;
-    private Transform worldbounds, poolParent, enemyParent;
 
-    public void Initialize(Factory<EnumType, ObjectType, DataType> factory, Transform worldbounds, Transform poolParent, Transform enemyParent)
+    private Transform worldbounds, objParent;
+
+    public void Initialize(Factory<EnumType, ObjectType, DataType> factory, Transform worldbounds)
     {
         this.factory = factory;
         collection = new HashSet<IManagable<DataType, ObjectType, EnumType>>();
-        objToRemove = new List<IManagable<DataType, ObjectType, EnumType>>();
+        objectsToRemove = new List<IManagable<DataType, ObjectType, EnumType>>();
         this.worldbounds = worldbounds;
-        this.poolParent = poolParent;
-        this.enemyParent = enemyParent;
-
+        this.objParent = new GameObject(typeof(ObjectType).Name + "_Parent").transform;
     }
 
     public void Refresh()
     {
         //Clear the waiting list of objects to remove
-        if (objToRemove.Count > 0)
+        if (objectsToRemove.Count > 0)
         {
-            for (int i = objToRemove.Count - 1; i >= 0; i--)
+            for (int i = objectsToRemove.Count - 1; i >= 0; i--)
             {
-                if (collection.Contains(objToRemove[i]))
-                    collection.Remove(objToRemove[i]);
+                if (collection.Contains(objectsToRemove[i]))
+                    collection.Remove(objectsToRemove[i]);
             }
-            objToRemove.Clear();
+            objectsToRemove.Clear();
         }
 
         //Making a waiting list of objects to be removed from the refresh list
@@ -42,7 +41,7 @@ public class Manager<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
 
             else
             {
-                objToRemove.Add(obj);
+                objectsToRemove.Add(obj);
                 PoolGeneric<EnumType, ObjectType, DataType>.Instance.Pool(obj.GetEnumType(), obj.GetObjType());
             }
         }
@@ -53,16 +52,16 @@ public class Manager<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
         //To Implement
     }
 
-    public void SpawnEnemy(EnumType enumType, DataType dataType, int nbEnemies = 1)
+    public ObjectType Spawn(EnumType enumType, DataType dataType)
     {
-        for (int i = 0; i < nbEnemies; i++)
-        {
             //Create Enemies by asking the factory
             ObjectType newObj = factory.CreateObject(enumType, dataType);
             //Initialize the enemy
             newObj.Initialize(dataType, enumType);
+            newObj.transform.SetParent(objParent);
             collection.Add(newObj);
-        }
+
+        return newObj;
     }
 
 }
