@@ -8,22 +8,9 @@ using System.Linq;
 
 public class PoolGeneric<EnumType, ObjectType, DataType> where ObjectType : MonoBehaviour, IManagable<DataType, ObjectType, EnumType>
 {
-    Dictionary<EnumType, Queue<ObjectType>> objDict;
+    Dictionary<EnumType, Queue<ObjectType>> objDict;   
 
-    #region Singleton
-    private static PoolGeneric<EnumType, ObjectType, DataType> instance = null;
-    private PoolGeneric() { }
-    public static PoolGeneric<EnumType, ObjectType, DataType> Instance
-    {
-        get
-        {
-            if (PoolGeneric<EnumType, ObjectType, DataType>.instance == null) PoolGeneric<EnumType, ObjectType, DataType>.instance = new PoolGeneric<EnumType, ObjectType, DataType>();
-            return PoolGeneric<EnumType, ObjectType, DataType>.instance;
-        }
-    }
-    #endregion
-
-    public void FirstEverInitialize()
+    public void Instantiate()
     {
         objDict = new Dictionary<EnumType, Queue<ObjectType>>();
 

@@ -8,6 +8,7 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
     ObjStats stats;
     private EnemyType enemyType;
     bool isActive;
+
     
 
     public void Delete()
@@ -66,6 +67,16 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
     public ObjStats GetStats()
     {
         return this.stats;
+    }
+
+    public void Pool()
+    {
+       //Logic to pursue when the object is cleared from the scene
+    }
+
+    public void DePool(ObjStats type)
+    {
+        //Logic to pursue when the object is instantiated back into the scene
     }
 }
 

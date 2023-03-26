@@ -5,18 +5,26 @@ using ExtensionFunctions;
 
 public class Manager<EnumType, ObjectType, DataType> where ObjectType : MonoBehaviour, IManagable<DataType, ObjectType, EnumType>
 {
+
+
+    //Get()
+    //Add()
+
     HashSet<IManagable<DataType, ObjectType, EnumType>> collection;
     List<IManagable<DataType, ObjectType, EnumType>> objectsToRemove;
     Factory<EnumType, ObjectType, DataType> factory;
+    PoolGeneric<EnumType, ObjectType, DataType> pool;
 
     private Transform worldbounds, objParent;
 
-    public void Initialize(Factory<EnumType, ObjectType, DataType> factory, Transform worldbounds)
+    public void Initialize(Factory<EnumType, ObjectType, DataType> factory, PoolGeneric<EnumType, ObjectType, DataType> pool)
     {
         this.factory = factory;
+        this.pool = pool;
+
         collection = new HashSet<IManagable<DataType, ObjectType, EnumType>>();
-        objectsToRemove = new List<IManagable<DataType, ObjectType, EnumType>>();
-        this.worldbounds = worldbounds;
+        objectsToRemove = new List<IManagable<DataType, ObjectType, EnumType>>();        
+
         this.objParent = new GameObject(typeof(ObjectType).Name + "_Parent").transform;
     }
 
@@ -42,10 +50,11 @@ public class Manager<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
             else
             {
                 objectsToRemove.Add(obj);
-                PoolGeneric<EnumType, ObjectType, DataType>.Instance.Pool(obj.GetEnumType(), obj.GetObjType());
+                pool.Pool(obj.GetEnumType(), obj.GetObjType());
             }
         }
     }
+
 
     public void FixedRefresh()
     {
@@ -62,6 +71,5 @@ public class Manager<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
             collection.Add(newObj);
 
         return newObj;
-    }
-
+    }    
 }

@@ -11,8 +11,10 @@ public interface IManagable<DataType, ObjectType, EnumType>
     bool IsActive();
     EnumType GetEnumType();
     ObjectType GetObjType();
-
     DataType GetStats();
-    
+    void Pool();
+    void DePool(DataType dataType);
+
+
 
 }
