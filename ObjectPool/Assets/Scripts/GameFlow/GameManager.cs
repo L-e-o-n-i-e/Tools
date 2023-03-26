@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
 
     FactoryPoolSystem<EnemyType, Test, ObjStats> enemyPoolSystem;
 
+    //We are cycling through the different types of objects(enemies here)
+    //with an index of enemyType
     private int enenyTypeIndex = 0;
     private int NB_ENEMY_TYPES;
 
@@ -58,6 +60,7 @@ public class GameManager : MonoBehaviour
         if (Time.time >= timeToSpawnEnemy)
         {
             InstantiateEnemy((EnemyType)enenyTypeIndex);
+            //Incrementing the index, to spawn different enemy each time
             enenyTypeIndex = ++enenyTypeIndex % NB_ENEMY_TYPES;
 
             timeToSpawnEnemy = Time.time + waitBeforeSpawnEnemy;
