@@ -8,7 +8,7 @@ using System.Linq;
 
 public class PoolGeneric<EnumType, ObjectType, DataType> where ObjectType : MonoBehaviour, IManagable<DataType, ObjectType, EnumType>
 {
-    Dictionary<EnumType, Queue<ObjectType>> objDict;   
+    Dictionary<EnumType, Queue<ObjectType>> objDict;
 
     public void Instantiate()
     {
@@ -28,7 +28,6 @@ public class PoolGeneric<EnumType, ObjectType, DataType> where ObjectType : Mono
 
     public ObjectType DePool(EnumType type)
     {
-        //return (objDict.Count > 0) ? objDict[type].Dequeue() : null;
         return (objDict[type].Count > 0) ? objDict[type].Dequeue() : null;
     }
 }

@@ -9,13 +9,7 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
     private EnemyType enemyType;
     bool isActive;
 
-    
 
-    public void Delete()
-    {
-        isActive = false;
-        gameObject.SetActive(false);
-    }
 
     public void FixedRefresh()
     {
@@ -32,8 +26,7 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
     {
         return this.enemyType;
     }
-     
-    
+
 
     public void Initialize(ObjStats stats, EnemyType enumType)
     {
@@ -55,12 +48,12 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
         this.stats.position = transform.position.ToFloatArr();
 
     }
-    
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.transform.tag.CompareTo("Player") == 0)
         {
-            Delete();
+            Pool();
         }
     }
 
@@ -71,12 +64,14 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
 
     public void Pool()
     {
-       //Logic to pursue when the object is cleared from the scene
+        isActive = false;
+        gameObject.SetActive(false);
     }
 
     public void DePool(ObjStats type)
     {
-        //Logic to pursue when the object is instantiated back into the scene
+        this.stats = type;
+        transform.position = ExtensionFuncs.RandomStartPosition(GameManager.Instance.worldBounds);
     }
 }
 
@@ -84,9 +79,9 @@ public class ObjStats
 {
     int hp;
     public float[] position;
-    
 
-    public ObjStats(int hp,  float[] position)
+
+    public ObjStats(int hp, float[] position)
     {
         this.hp = hp;
         this.position = position;

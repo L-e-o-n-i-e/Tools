@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class FactoryPoolSystem<EnumType, ObjectType, DataType> where ObjectType : MonoBehaviour, IManagable<DataType, ObjectType, EnumType>
 {
-    PoolGeneric<EnumType, ObjectType, DataType> pool;    
-    Factory<EnumType, ObjectType, DataType> factory;    
+    PoolGeneric<EnumType, ObjectType, DataType> pool;
+    Factory<EnumType, ObjectType, DataType> factory;
     Manager<EnumType, ObjectType, DataType> manager;
 
     public void Initialize()

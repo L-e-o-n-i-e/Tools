@@ -6,15 +6,11 @@ public interface IManagable<DataType, ObjectType, EnumType>
 {
     void Initialize(DataType stats, EnumType enumType);
     void Refresh();
-    void FixedRefresh();
-    void Delete();
+    void FixedRefresh();  
     bool IsActive();
     EnumType GetEnumType();
     ObjectType GetObjType();
     DataType GetStats();
     void Pool();
     void DePool(DataType dataType);
-
-
-
 }

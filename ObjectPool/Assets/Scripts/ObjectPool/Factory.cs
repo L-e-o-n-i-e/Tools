@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-
-
 public class Factory<EnumType, ObjectType, DataType> where ObjectType : MonoBehaviour, IManagable<DataType, ObjectType, EnumType>
 {
     PoolGeneric<EnumType, ObjectType, DataType> pool;
@@ -20,8 +18,8 @@ public class Factory<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
 
         foreach (EnumType type in enums)
         {
-            ObjectType obj =  Resources.Load<ObjectType>("Prefabs/Enemy/" + type.ToString());
-            ressourcesDict.Add(type, obj);           
+            ObjectType obj = Resources.Load<ObjectType>("Prefabs/Enemy/" + type.ToString());
+            ressourcesDict.Add(type, obj);
         }
     }
 
@@ -29,11 +27,14 @@ public class Factory<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
     {
         //Ask Pool if there is an object in the pool
         ObjectType obj = pool.DePool(type);
-        if(obj == null)
+
+        if (obj == null)
         {
             //If not, create one
-           obj = GameObject.Instantiate<ObjectType>(ressourcesDict[type]);    
-        }        
+            obj = GameObject.Instantiate<ObjectType>(ressourcesDict[type]);
+        }
+        else
+            obj.DePool(stats);
 
         return obj;
     }

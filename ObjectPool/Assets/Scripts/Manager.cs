@@ -5,15 +5,11 @@ using ExtensionFunctions;
 
 public class Manager<EnumType, ObjectType, DataType> where ObjectType : MonoBehaviour, IManagable<DataType, ObjectType, EnumType>
 {
-
-
-    //Get()
-    //Add()
+    Factory<EnumType, ObjectType, DataType> factory;
+    PoolGeneric<EnumType, ObjectType, DataType> pool;
 
     HashSet<IManagable<DataType, ObjectType, EnumType>> collection;
     List<IManagable<DataType, ObjectType, EnumType>> objectsToRemove;
-    Factory<EnumType, ObjectType, DataType> factory;
-    PoolGeneric<EnumType, ObjectType, DataType> pool;
 
     private Transform worldbounds, objParent;
 
@@ -23,7 +19,7 @@ public class Manager<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
         this.pool = pool;
 
         collection = new HashSet<IManagable<DataType, ObjectType, EnumType>>();
-        objectsToRemove = new List<IManagable<DataType, ObjectType, EnumType>>();        
+        objectsToRemove = new List<IManagable<DataType, ObjectType, EnumType>>();
 
         this.objParent = new GameObject(typeof(ObjectType).Name + "_Parent").transform;
     }
@@ -63,13 +59,13 @@ public class Manager<EnumType, ObjectType, DataType> where ObjectType : MonoBeha
 
     public ObjectType Spawn(EnumType enumType, DataType dataType)
     {
-            //Create Enemies by asking the factory
-            ObjectType newObj = factory.CreateObject(enumType, dataType);
-            //Initialize the enemy
-            newObj.Initialize(dataType, enumType);
-            newObj.transform.SetParent(objParent);
-            collection.Add(newObj);
+        //Create Enemies by asking the factory
+        ObjectType newObj = factory.CreateObject(enumType, dataType);
+        //Initialize the enemy
+        newObj.Initialize(dataType, enumType);
+        newObj.transform.SetParent(objParent);
+        collection.Add(newObj);
 
         return newObj;
-    }    
+    }
 }
