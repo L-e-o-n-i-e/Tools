@@ -71,7 +71,8 @@ public class Test : MonoBehaviour, IManagable<ObjStats, Test, EnemyType>
     public void DePool(ObjStats type)
     {
         this.stats = type;
-        transform.position = ExtensionFuncs.RandomStartPosition(GameManager.Instance.worldBounds);
+        this.stats.position = ExtensionFuncs.RandomStartPosition(GameManager.Instance.worldBounds).ToFloatArr();
+        transform.position = this.stats.position.ToVector3();
     }
 }
 

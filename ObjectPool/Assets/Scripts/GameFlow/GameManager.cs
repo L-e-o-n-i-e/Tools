@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
 
         NB_ENEMY_TYPES = Enum.GetNames(typeof(EnemyType)).Length;
         timeToSpawnEnemy = Time.time + waitBeforeSpawnEnemy;
+
         InstantiateEnemy((EnemyType)enenyTypeIndex);
     }
     private void Update()
