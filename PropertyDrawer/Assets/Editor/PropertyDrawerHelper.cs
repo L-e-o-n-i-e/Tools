@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.UIElements;
 
-public static class PropertyDrawerHelper 
+public static class PropertyDrawerHelper
 {
     public static void DrawProperty(Rect position, SerializedProperty property, GUIContent GUIlabel, params PropertyData[] properties)
     {
@@ -18,7 +18,7 @@ public static class PropertyDrawerHelper
             float widthOfProperty = position.width / properties.Length;
 
 
-            Rect r = new Rect(position.x + widthOfProperty*i, position.y, widthOfProperty, LINE_HEIGHT);
+            Rect r = new Rect(position.x + widthOfProperty * i, position.y, widthOfProperty, LINE_HEIGHT);
             SerializedProperty nameProperty = property.FindPropertyRelative(properties[i].propertyName);
             SerializedPropertyType propertyType = nameProperty.propertyType;
 
@@ -89,11 +89,8 @@ public static class PropertyDrawerHelper
                 default:
                     break;
             }
-            //EditorGUI.PropertyField
-            
-        }
-        // Draw label
 
+        }
         // Don't make child fields be indented
         var indent = EditorGUI.indentLevel;
         EditorGUI.indentLevel = 0;
@@ -115,4 +112,3 @@ public static class PropertyDrawerHelper
         }
     }
 }
-

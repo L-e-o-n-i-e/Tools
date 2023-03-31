@@ -216,8 +216,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1026570180}
-  - component: {fileID: 1026570179}
   - component: {fileID: 1026570178}
+  - component: {fileID: 1026570179}
   m_Layer: 0
   m_Name: Recipe
   m_TagString: Untagged
@@ -255,7 +255,7 @@ MonoBehaviour:
     toolName: Knife
     power: 7
     color: {r: 0.6392157, g: 0.6392157, b: 0.6156863, a: 0.16862746}
-    position: {x: 5.08, y: 6.32}
+    position: {x: 5.93, y: 5.42}
     smash:
       serializedVersion: 2
       m_Curve:

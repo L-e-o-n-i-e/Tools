@@ -18,7 +18,7 @@ public class Ingredient
 [Serializable]
 public class Tool
 {
-    public string toolName;
+    public string toolName;    
     public int power = 3;
     public Color color;
     [SerializeField] private Vector2 position;
